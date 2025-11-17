@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.rotate-hover {
+  transition: transform 5s ease-out; /* slow stop */
+}
+
+.rotate-hover:hover {
+  animation: spinSlow 1s linear infinite; /* continuous spin */
+}
+
+/* @keyframes wave {
+  0% { transform: translateX(-50%) scale(1.5); opacity: 0.3; }
+  50% { transform: translateX(50%) scale(1.5); opacity: 0.5; }
+  100% { transform: translateX(-50%) scale(1.5); opacity: 0.3; }
+}
+
+button {
+  position: relative;
+  z-index: 1;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255,255,255,0.15); 
+  border-radius: inherit;
+  pointer-events: none;
+  transform: rotate(45deg);
+  z-index: 0;
+  transition: all 0.3s ease;
+}
+
+button:hover::before {
+  background: rgba(255,255,255,0.25);
+  transform: rotate(45deg) scale(1.1);
+} */
+
+@keyframes liquidMove {
+  0% { transform: translateX(-100%) skewX(-20deg); }
+  50% { transform: translateX(100%) skewX(20deg); }
+  100% { transform: translateX(-100%) skewX(-20deg); }
+}
+
+.liquid-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: rgba(255,255,255,0.15); /* light shine */
+  pointer-events: none;
+  border-radius: inherit;
+  transform: translateX(-100%) skewX(-20deg);
+  z-index: 0;
+  animation: liquidMove 3s linear infinite;
+}
+
+.liquid-btn:hover::before {
+  background: rgba(255,255,255,0.25);
+}
+
+.liquid-btn span {
+  position: relative;
+  z-index: 10;
+}
