@@ -19,7 +19,7 @@ export default function LoginPage({ onLogin }) {
         setLoading(true);
         try {
             const res = await axios.post(
-                "https://sales-booster-api.tmkcomputers.in/api/Auth/login",
+                "http://10.150.223.164:8080/api/auth/login",
                 {
                     username: formData.username,
                     password: formData.password,

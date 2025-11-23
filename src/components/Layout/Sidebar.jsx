@@ -3,7 +3,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   BarChart3,
-  CalendarCheck,
+  MapPin,
   Target,
   Users,
   Settings,
@@ -16,22 +16,18 @@ import {
   ChevronDown,
   Logs,
 } from "lucide-react";
-import iconLogin from "../../assets/iconLogin.png";
+import iconLogin from "../../assets/favicon.png";
 import axiosInstance from "../../services/axiosInstance"; // Import API
 
 const menuItems = [
   { id: "dashboard", icon: LayoutDashboard, label: "Dashboard", active: true, badge: "New" },
-  { id: "attendance", icon: CalendarCheck, label: "Attendance" },
-  { id: "target", icon: Target, label: "Target" },
-  { id: "all-clients", label: "Users", icon: Users },
-  { id: "leaverequest", label: "Leave Requests", icon: CalendarCheck },
-  { id: "salesList", label: "Sales List", icon: BarChart3 },
-  { id: "expensesList", label: "Expenses List", icon: BarChart3 },
+  { id: "users", label: "Users", icon: Users },
+  { id: "village", icon: MapPin, label: "Village" },
   {
     id: "master",
     icon: Database,
     label: "Master",
-    submenu: [{ id: "product", label: "Product Master", icon: Zap }],
+    submenu: [{ id: "state", label: "State Master", icon: Zap }, { id: "district", label: "District Master", icon: Zap }],
   },
   {
     id: "messages",
@@ -109,7 +105,7 @@ export default function Sidebar({ collapsed, onToggle }) {
         </div>
         {sidebarWidth > 80 && (
           <div>
-            <h1 className="text-xl font-bold text-slate-800">Sales Booster</h1>
+            <h1 className="text-xl font-bold text-slate-800">Smart Village Management System</h1>
             <p className="text-xs text-slate-500">Admin Panel</p>
           </div>
         )}

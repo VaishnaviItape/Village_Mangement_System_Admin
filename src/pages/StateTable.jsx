@@ -1,248 +1,197 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SmartDataTable from "../components/tables/SmartDataTable";
-import { getStates, addState } from "../services/stateService";
-import { addCountry, getCountries } from "../services/countryService";
+import {
+    getState,
+    addState,
+    updateState,
+    deleteState
+} from "../services/stateService";
 import toast, { Toaster } from "react-hot-toast";
 
-export default function StateTable() {
+export default function StatePage() {
     const [states, setStates] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [countries, setCountries] = useState([]);
-
-    const [showStateModal, setShowStateModal] = useState(false);
-    const [showCountryModal, setShowCountryModal] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingState, setEditingState] = useState(null);
-    const [newState, setNewState] = useState({ name: "", countryId: "" });
-    const [newCountry, setNewCountry] = useState({ name: "", code: "" });
+    const [formData, setFormData] = useState({
+        state_code: "",
+        state_name: "",
+        is_active: 1
+    });
 
-    // 🔄 Fetch States & Countries
+    // Fetch All States
     const fetchStates = async () => {
+        setLoading(true);
         try {
-            const res = await getStates();
-            setStates(res.data);
+            const res = await getState();
+            setStates(res.data.data);
         } catch {
-            toast.error("Failed to fetch states");
-        }
-    };
-
-    const fetchCountries = async () => {
-        try {
-            const res = await getCountries();
-            setCountries(res.data);
-        } catch {
-            toast.error("Failed to fetch countries");
+            toast.error("Failed to fetch state records");
+        } finally {
+            setLoading(false);
         }
     };
 
     useEffect(() => {
         fetchStates();
-        fetchCountries();
     }, []);
 
-    // ➕ Add State
-    const handleAddState = () => {
-        setShowStateModal(true);
-        setNewState({ name: "", countryId: "" });
+    // Add
+    const handleAdd = () => {
         setEditingState(null);
+        setFormData({
+            state_code: "",
+            state_name: "",
+            is_active: 1
+        });
+        setIsModalOpen(true);
     };
 
-    const handleEditState = (state) => {
+    // Edit
+    const handleEdit = (state) => {
         setEditingState(state);
-        setNewState({ name: state.name, countryId: state.countryId });
-        setShowStateModal(true);
+        setFormData({
+            state_code: state.state_code,
+            state_name: state.state_name,
+            is_active: state.is_active
+        });
+        setIsModalOpen(true);
     };
 
-    const handleSaveState = async () => {
-        if (!newState.name || !newState.countryId) {
-            toast.error("Please enter state name and select a country");
-            return;
-        }
-        try {
-            if (editingState) {
-                await updateState(editingState.id, newState);
-                toast.success("State updated!");
-            } else {
-                await addState(newState);
-                toast.success("State added!");
-            }
-            fetchStates();
-            setShowStateModal(false);
-            setEditingState(null);
-            setNewState({ name: "", countryId: "" });
-        } catch {
-            toast.error("Failed to save state");
-        }
-    };
+    // Delete
+    const handleDelete = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this state?")) return;
 
-
-    // ----------------- State Delete -----------------
-    const handleDeleteState = async (id) => {
-        if (!confirm("Are you sure to delete this state?")) return;
         try {
             await deleteState(id);
-            toast.success("State deleted!");
+            toast.success("State deleted successfully!");
             fetchStates();
         } catch {
             toast.error("Failed to delete state");
         }
     };
 
-    // ➕ Add Country (from Country modal or State modal)
-    const handleAddCountry = async () => {
-        if (!newCountry.name || !newCountry.code) {
-            toast.error("Please enter country name and code");
+    // Save (Add or Update)
+    const handleSave = async () => {
+        if (!formData.state_code || !formData.state_name) {
+            toast.error("State Code and State Name are required!");
             return;
         }
-        try {
-            const res = await addCountry(newCountry);
-            toast.success("Country added!");
-            fetchCountries();
-            setShowCountryModal(false);
-            setNewCountry({ name: "", code: "" });
 
-            // Auto-select newly added country in State modal
-            setNewState({ ...newState, countryId: res.data.id });
+        try {
+            if (editingState) {
+                await updateState(editingState.id, formData);
+                toast.success("State updated successfully!");
+            } else {
+                await addState(formData);
+                toast.success("State added successfully!");
+            }
+
+            setIsModalOpen(false);
+            fetchStates();
         } catch {
-            toast.error("Failed to add country");
+            toast.error("Failed to save state");
         }
     };
 
+    // Table Columns
     const columns = [
         { header: "ID", accessor: "id" },
-        { header: "State", accessor: "name" },
-        { header: "Country", accessor: "countryName" },
+        { header: "State Code", accessor: "state_code" },
+        { header: "State Name", accessor: "state_name" },
+        { header: "Active", accessor: "is_active" }
     ];
 
     return (
-        <div>
-            <Toaster
-                position="top-center"  // top-right → top-center
-                toastOptions={{
-                    style: { minWidth: '400px', fontSize: '25px', padding: '18px 26px' },
-                }}
-            />
+        <div className="p-8 space-y-6">
+            <Toaster position="top-center" />
+
             <SmartDataTable
-                title="States"
+                title="State Management"
                 columns={columns}
                 data={states}
-                onAdd={handleAddState}
-                onEdit={handleEditState}
-                onDelete={handleDeleteState}
+                onAdd={handleAdd}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
                 showSerial={true}
             />
 
-            {/* ==================== State Modal ==================== */}
-            {showStateModal && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-                    <div className="bg-white w-96 max-w-[90%] p-6 rounded-xl shadow-xl">
-                        <h2 className="text-xl font-bold mb-4">
-                            {editingState ? "Edit State" : "Add State"}
-                        </h2>
-
-                        <input
-                            type="text"
-                            placeholder="State Name"
-                            value={newState.name}
-                            onChange={(e) =>
-                                setNewState({ ...newState, name: e.target.value })
-                            }
-                            className="w-full border px-3 py-2 rounded mb-4"
-                        />
-
-                        <div className="flex gap-2 mb-4">
-                            <select
-                                value={newState.countryId}
-                                onChange={(e) => {
-                                    if (e.target.value === "add_new") {
-                                        setShowCountryModal(true);
-                                    } else {
-                                        setNewState({ ...newState, countryId: e.target.value });
-                                    }
-                                }}
-                                className="flex-1 border px-3 py-2 rounded"
-                            >
-                                <option value="">Select Country</option>
-                                {countries.map((c) => (
-                                    <option key={c.id} value={c.id}>
-                                        {c.name}
-                                    </option>
-                                ))}
-                                <option
-                                    value="add_new"
-                                    className="text-gray-600 italic bg-gray-100 font-medium"
-                                >
-                                    ➕ Add New Country
-                                </option>
-                            </select>
-                        </div>
-
-                        <div className="flex justify-end gap-2">
-                            <button
-                                onClick={() => setShowStateModal(false)}
-                                className="px-4 py-2 bg-gray-300 rounded"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleSaveState}
-                                className="px-4 py-2 bg-green-500 text-white rounded"
-                            >
-                                {editingState ? "Update" : "Add"}
-                            </button>
-                        </div>
-                    </div>
+            {/* Loader */}
+            {loading && (
+                <div className="fixed inset-0 flex items-center justify-center bg-white/50 z-50">
+                    <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
                 </div>
             )}
 
-            {/* ==================== Country Modal ==================== */}
-            {showCountryModal && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/40">
-                    <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-[400px] p-6 animate-fade-in">
-                        <h2 className="text-lg font-bold text-slate-800 mb-4">Add New Country</h2>
+            {/* Modal */}
+            {isModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl shadow-xl w-[450px] p-6">
+                        <h2 className="text-lg font-bold mb-4">
+                            {editingState ? "Edit State" : "Add State"}
+                        </h2>
 
                         <div className="space-y-4">
+                            {/* State Code */}
                             <div>
-                                <label className="block text-sm font-medium text-slate-600 mb-1">
-                                    Country Name
+                                <label className="block text-sm font-medium text-gray-600 mb-1">
+                                    State Code
                                 </label>
                                 <input
                                     type="text"
-                                    value={newCountry.name}
+                                    value={formData.state_code}
                                     onChange={(e) =>
-                                        setNewCountry({ ...newCountry, name: e.target.value })
+                                        setFormData({ ...formData, state_code: e.target.value })
                                     }
-                                    placeholder="Enter country name"
-                                    className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                                    className="w-full border rounded-lg px-3 py-2"
                                 />
                             </div>
+
+                            {/* State Name */}
                             <div>
-                                <label className="block text-sm font-medium text-slate-600 mb-1">
-                                    Country Code
+                                <label className="block text-sm font-medium text-gray-600 mb-1">
+                                    State Name
                                 </label>
                                 <input
                                     type="text"
-                                    value={newCountry.code}
+                                    value={formData.state_name}
                                     onChange={(e) =>
-                                        setNewCountry({ ...newCountry, code: e.target.value })
+                                        setFormData({ ...formData, state_name: e.target.value })
                                     }
-                                    placeholder="Enter country code"
-                                    className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                                    className="w-full border rounded-lg px-3 py-2"
                                 />
+                            </div>
+
+                            {/* Active Toggle */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">
+                                    Active Status
+                                </label>
+                                <select
+                                    value={formData.is_active}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, is_active: Number(e.target.value) })
+                                    }
+                                    className="w-full border rounded-lg px-3 py-2"
+                                >
+                                    <option value={1}>Active</option>
+                                    <option value={0}>Inactive</option>
+                                </select>
                             </div>
                         </div>
 
-                        <div className="flex justify-end mt-6 space-x-3">
+                        <div className="flex justify-end space-x-3 mt-6">
                             <button
-                                onClick={() => setShowCountryModal(false)}
-                                className="px-4 py-2 rounded-lg border border-slate-300 text-slate-600 text-sm hover:bg-slate-100 transition"
+                                onClick={() => setIsModalOpen(false)}
+                                className="bg-gray-500 text-white px-4 py-2 rounded-lg"
                             >
                                 Cancel
                             </button>
                             <button
-                                onClick={handleAddCountry}
-                                className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm hover:bg-indigo-700 transition"
+                                onClick={handleSave}
+                                className="bg-green-600 text-white px-4 py-2 rounded-lg"
                             >
-                                Add
+                                {editingState ? "Update" : "Add"}
                             </button>
                         </div>
                     </div>

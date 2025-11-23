@@ -39,7 +39,7 @@
 //                                 borderRadius: "12px",
 //                                 boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
 //                             }}
-                            
+
 //                         />
 //                     </PieChart>
 //                 </ResponsiveContainer>
@@ -70,25 +70,27 @@
 
 import React, { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Sector } from "recharts";
-import { getClients } from "../../services/clientService";
+import { getUsers } from "../../services/userService";
 
 function SalesChart() {
   const [data, setData] = useState([]);
   const [activeIndex, setActiveIndex] = useState(null);
-
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (!token) return;
 
     const fetchData = async () => {
       try {
-        const clients = await getClients(token);
-        const safeClients = Array.isArray(clients) ? clients : [];
-        const total = safeClients.length || 1; // avoid divide by zero
+        const res = await getUsers(token);
 
-        const basic = safeClients.filter(c => c.subscriptionPlanName === "Basic").length;
-        const pro = safeClients.filter(c => c.subscriptionPlanName === "Pro").length;
-        const advance = safeClients.filter(c => c.subscriptionPlanName === "Advanced").length;
+        // Extract array safely
+        const users = Array.isArray(res?.data?.data) ? res.data.data : [];
+
+        const total = users.length || 1; // avoid divide by zero
+
+        const basic = users.filter(c => c.subscriptionPlanName === "Basic").length;
+        const pro = users.filter(c => c.subscriptionPlanName === "Pro").length;
+        const advance = users.filter(c => c.subscriptionPlanName === "Advanced").length;
 
         const chartData = [
           { name: "Basic", value: parseFloat(((basic / total) * 100).toFixed(1)), color: "#3b82f6" },
@@ -104,6 +106,7 @@ function SalesChart() {
 
     fetchData();
   }, []);
+
 
   const handleClick = (_, index) => {
     setActiveIndex(index === activeIndex ? null : index);
@@ -198,9 +201,8 @@ function SalesChart() {
           <div
             key={index}
             onClick={() => handleClick(null, index)}
-            className={`flex items-center justify-between px-1.5 py-0.5 rounded-lg transition-all cursor-pointer ${
-              activeIndex === index ? "bg-blue-100 scale-105" : "hover:bg-slate-50"
-            }`}
+            className={`flex items-center justify-between px-1.5 py-0.5 rounded-lg transition-all cursor-pointer ${activeIndex === index ? "bg-blue-100 scale-105" : "hover:bg-slate-50"
+              }`}
           >
             <div className="flex items-center space-x-3">
               <div

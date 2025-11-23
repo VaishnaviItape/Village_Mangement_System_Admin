@@ -12,7 +12,7 @@ import {
   User,
 } from "lucide-react";
 import { logout } from "../../services/authService";
-import { getClients } from "../../services/clientService";
+import { getUsers } from "../../services/userService";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../services/axiosInstance"; // import API instance
 import toast from "react-hot-toast";
@@ -96,12 +96,18 @@ export default function Header({ sidebarCollapsed, onToggleSidebar }) {
 
     const fetchClients = async () => {
       try {
-        const data = await getClients(token);
-        const inactive = data
-          .filter((c) => !c.isActive)
+        const res = await getUsers(token);
+
+        // Extract actual array safely
+        const users = res?.data?.data || [];
+
+        const inactive = users
+          .filter((c) => !c.is_active) // Use correct key name
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
           .slice(0, 6);
+
         setInactiveClients(inactive);
+
       } catch (err) {
         console.error("Failed to fetch clients:", err);
       }
@@ -109,6 +115,7 @@ export default function Header({ sidebarCollapsed, onToggleSidebar }) {
 
     fetchClients();
   }, []);
+
 
   const handleClientClick = (id) => {
     if (!id) return;
