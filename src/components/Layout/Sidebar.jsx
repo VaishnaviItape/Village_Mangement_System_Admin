@@ -2,33 +2,83 @@ import React, { useState, useEffect } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
-  BarChart3,
-  MapPin,
-  Target,
   Users,
-  Settings,
+  MapPin,
   Database,
-  FileText,
-  Zap,
-  DollarSign,
-  UserCheck,
-  Activity,
   ChevronDown,
-  Logs,
+  Zap,
+  FileText,
+  UserCircle,
+  Bell,
+  Home,
+  FileCheck,
+  Ticket,
+  Landmark,
+  Percent
 } from "lucide-react";
 import iconLogin from "../../assets/favicon.png";
-import axiosInstance from "../../services/axiosInstance"; // Import API
+import axiosInstance from "../../services/axiosInstance";
 
 const menuItems = [
   { id: "dashboard", icon: LayoutDashboard, label: "Dashboard", active: true, badge: "New" },
+
+  // Basic Modules
   { id: "users", label: "Users", icon: Users },
   { id: "village", icon: MapPin, label: "Village" },
+
+  // Citizen & Applications
+  {
+    id: "citizen-section",
+    icon: UserCircle,
+    label: "Citizen Management",
+    submenu: [
+      { id: "citizen", label: "Citizen Records", icon: Zap },
+      { id: "applications", label: "Applications", icon: FileText },
+      { id: "complaints", label: "Complaints", icon: FileCheck },
+    ],
+  },
+
+  // Property / Taxation
+  {
+    id: "property-section",
+    icon: Home,
+    label: "Property & Tax",
+    submenu: [
+      { id: "property", label: "Property Records", icon: Ticket },
+      { id: "tax", label: "Tax Collection", icon: Percent },
+    ],
+  },
+
+  // Schemes & Grants
+  {
+    id: "schemes",
+    icon: Landmark,
+    label: "Government Schemes",
+    submenu: [
+      { id: "scheme", label: "Scheme Master", icon: Zap },
+      { id: "schemeapplications", label: "Scheme Applications", icon: FileCheck },
+    ],
+  },
+
+  // Notifications
+  {
+    id: "notification",
+    icon: Bell,
+    label: "Notifications",
+  },
+
+  // Master Section
   {
     id: "master",
     icon: Database,
     label: "Master",
-    submenu: [{ id: "state", label: "State Master", icon: Zap }, { id: "district", label: "District Master", icon: Zap }],
+    submenu: [
+      { id: "state", label: "State Master", icon: Zap },
+      { id: "district", label: "District Master", icon: Zap },
+    ],
   },
+
+  // Messages
   {
     id: "messages",
     icon: Database,
@@ -40,22 +90,29 @@ const menuItems = [
 export default function Sidebar({ collapsed, onToggle }) {
   const [expandedItems, setExpandedItems] = useState(new Set());
   const [hovered, setHovered] = useState(false);
-  const [user, setUser] = useState({ fullName: "", role: "" }); // 🔹 Dynamic user
+
+  // ⭐ Updated user object
+  const [user, setUser] = useState({ full_name: "", role: "" });
+
   const navigate = useNavigate();
   const location = useLocation();
   const [activeMenu, setActiveMenu] = useState("dashboard");
 
   const sidebarWidth = collapsed ? (hovered ? 288 : 80) : 288;
 
+  // 🔹 Fetch logged-in user from backend
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axiosInstance.get("/Auth/me");
-        const data = response.data;
-        setUser({
-          fullName: data.fullName || "User",
-          role: data.roles ? data.roles[0] : "User",
-        });
+        const response = await axiosInstance.get("/api/auth/me");
+        const result = response.data;
+
+        if (result.success && result.user) {
+          setUser({
+            full_name: result.user.full_name,
+            role: result.user.role,
+          });
+        }
       } catch (err) {
         console.error("Failed to fetch user:", err);
       }
@@ -66,8 +123,7 @@ export default function Sidebar({ collapsed, onToggle }) {
   const toggleExpanded = (itemId) => {
     setExpandedItems((prev) => {
       const newSet = new Set(prev);
-      if (newSet.has(itemId)) newSet.delete(itemId);
-      else newSet.add(itemId);
+      newSet.has(itemId) ? newSet.delete(itemId) : newSet.add(itemId);
       return newSet;
     });
   };
@@ -96,46 +152,39 @@ export default function Sidebar({ collapsed, onToggle }) {
     >
       {/* Logo */}
       <div className="p-6 border-b border-slate-200 flex items-center space-x-3">
-        <div className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ease-in-out hover:bg-slate-100 hover:shadow-md hover:scale-105">
-          <img
-            src={iconLogin}
-            alt="logo"
-            className="w-12 h-12 object-contain transition-transform duration-300 ease-in-out hover:scale-110"
-          />
-        </div>
+        <img src={iconLogin} alt="logo" className="w-12 h-12" />
         {sidebarWidth > 80 && (
           <div>
-            <h1 className="text-xl font-bold text-slate-800">Smart Village Management System</h1>
+            <h1 className="text-xl font-bold text-slate-800">Smart Village</h1>
             <p className="text-xs text-slate-500">Admin Panel</p>
           </div>
         )}
       </div>
 
-      {/* Menu */}
+      {/* Menu Items */}
       <div className="flex-1 p-4 space-y-1 overflow-y-auto">
         {menuItems.map((item) => {
-          const isActive = location.pathname.startsWith(`/${item.id}`);
           const isExpanded = expandedItems.has(item.id);
 
           return (
             <div key={item.id}>
               {item.submenu ? (
                 <>
-                  {/* Main menu with submenu */}
                   <button
                     onClick={() => handleMenuClick(item)}
-                    className={`w-full flex items-center justify-between p-3 rounded-xl transition-all duration-200 ${activeMenu === item.id || expandedItems.has(item.id)
-                      ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
-                      : "text-slate-600 hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-purple-500/10 hover:text-slate-800"
+                    className={`w-full flex items-center justify-between p-3 rounded-xl transition-all duration-200 ${activeMenu === item.id || isExpanded
+                      ? "bg-blue-500 text-white"
+                      : "text-slate-700 hover:bg-blue-100"
                       }`}
                   >
                     <div className="flex items-center gap-3">
-                      <item.icon className={`w-5 h-5 transition-transform duration-500 rotate-hover`} />
+                      <item.icon className="w-5 h-5" />
                       {sidebarWidth > 80 && <span>{item.label}</span>}
                     </div>
                     {sidebarWidth > 80 && (
                       <ChevronDown
-                        className={`w-4 h-4 transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                        className={`w-4 h-4 transition-transform ${isExpanded ? "rotate-180" : ""
+                          }`}
                       />
                     )}
                   </button>
@@ -146,47 +195,32 @@ export default function Sidebar({ collapsed, onToggle }) {
                       className={`ml-6 mt-1 space-y-1 overflow-hidden transition-all duration-500 ${isExpanded ? "max-h-96" : "max-h-0"
                         }`}
                     >
-                      {item.submenu.map((subitem) => (
+                      {item.submenu.map((sub) => (
                         <NavLink
-                          key={subitem.id}
-                          to={subitem.path || `/${subitem.id}`}
+                          key={sub.id}
+                          to={`/${sub.id}`}
                           className={({ isActive }) =>
-                            `w-full text-left flex items-center gap-2 p-2 text-sm rounded-lg transition-all ${isActive
-                              ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md"
-                              : "text-slate-600 hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-purple-500/10 hover:text-slate-800"
+                            `flex items-center gap-2 p-2 text-sm rounded-lg ${isActive ? "bg-blue-500 text-white" : "hover:bg-blue-100"
                             }`
                           }
                         >
-                          {subitem.icon && <subitem.icon className="w-4 h-4" />}
-                          <span>{subitem.label}</span>
+                          <sub.icon className="w-4 h-4" />
+                          <span>{sub.label}</span>
                         </NavLink>
                       ))}
                     </div>
                   )}
                 </>
               ) : (
-                // Non-submenu item
                 <NavLink
                   to={`/${item.id}`}
-                  end
                   className={({ isActive }) =>
-                    `w-full flex items-center p-3 rounded-xl transition-all duration-200 ${isActive
-                      ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
-                      : "text-slate-600 hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-purple-500/10 hover:text-slate-800"
+                    `flex items-center p-3 rounded-xl ${isActive ? "bg-blue-500 text-white" : "text-slate-700 hover:bg-blue-100"
                     }`
                   }
                 >
-                  <item.icon className={`w-5 h-5 transition-transform duration-500 rotate-hover`} />
-                  {sidebarWidth > 80 && (
-                    <>
-                      <span className="font-medium ml-2">{item.label}</span>
-                      {item.badge && (
-                        <span className="px-3 py-1 text-xs bg-red-400 text-white rounded-full ml-5">
-                          {item.badge}
-                        </span>
-                      )}
-                    </>
-                  )}
+                  <item.icon className="w-5 h-5" />
+                  {sidebarWidth > 80 && <span className="ml-2">{item.label}</span>}
                 </NavLink>
               )}
             </div>
@@ -194,20 +228,20 @@ export default function Sidebar({ collapsed, onToggle }) {
         })}
       </div>
 
-      {/* User Section */}
+      {/* 🔹 User Section */}
       {sidebarWidth > 80 && (
         <div className="p-4 border-t border-slate-200">
-          <div className="flex items-center space-x-3 p-3 rounded-xl bg-slate-50">
+          <div className="flex items-center space-x-3 p-3 rounded-xl bg-slate-100">
             <img
               src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                user.fullName
+                user.full_name
               )}&background=6366f1&color=fff`}
-              alt={user.fullName}
-              className="w-10 h-10 rounded-full ring-2 ring-blue-500/40"
+              alt={user.full_name}
+              className="w-10 h-10 rounded-full"
             />
             <div>
-              <p className="text-sm font-medium text-slate-800">{user.fullName}</p>
-              <p className="text-xs text-slate-500">{user.role}</p>
+              <p className="text-sm font-bold">{user.full_name}</p>
+              <p className="text-xs text-gray-500">{user.role}</p>
             </div>
           </div>
         </div>

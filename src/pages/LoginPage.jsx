@@ -19,9 +19,9 @@ export default function LoginPage({ onLogin }) {
         setLoading(true);
         try {
             const res = await axios.post(
-                "http://10.150.223.164:8080/api/auth/login",
+                "http://localhost:8080/api/auth/login",
                 {
-                    username: formData.username,
+                    email: formData.username,
                     password: formData.password,
                 },
                 {
@@ -33,7 +33,7 @@ export default function LoginPage({ onLogin }) {
             console.log("Token / Data:", res.data);
 
             // ✅ Save token in localStorage
-            const token = res.data.accessToken; // ya API ka jo actual token field hai
+            const token = res.data.token; // ya API ka jo actual token field hai
             localStorage.setItem("authToken", token);
 
             // ✅ call onLogin with token/data if needed

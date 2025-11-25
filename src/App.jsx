@@ -92,6 +92,14 @@ import ChangePasswordPage from "./pages/Auth/ChangePasswordPage.jsx";
 import MyMessages from "./pages/MyMessages.jsx"
 import VillagePage from "./pages/VillagePage.jsx";
 import Users from "./pages/users.jsx";
+import ApplicationPage from "./pages/ApplicationPage.jsx";
+import CitizenPage from "./pages/CitizenPage.jsx";
+import ComplaintPage from "./pages/ComplaintPage.jsx";
+import NotificationPage from "./pages/NotificationPage.jsx";
+import PropertyPage from "./pages/PropertyPage.jsx";
+import SchemeApplicationsPage from "./pages/SchemeApplicationsPage.jsx";
+import Schemes from "./pages/Schemes.jsx";
+import TaxPage from "./pages/TaxPage.jsx";
 export default function App() {
   const [sideBarCollapsed, setSideBarCollapsed] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("authToken"));
@@ -250,7 +258,90 @@ export default function App() {
           }
         />
 
+        <Route
+          path="/applications"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ApplicationPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
+        <Route
+          path="/citizen"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <CitizenPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/complaints"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ComplaintPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/notification"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <NotificationPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/property"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <PropertyPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/schemeaplications"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <SchemeApplicationsPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/scheme"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Schemes />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tax"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <TaxPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
         {/* Default Redirect */}
         <Route
           path="*"

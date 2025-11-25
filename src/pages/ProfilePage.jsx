@@ -1,145 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import axiosInstance from "../services/axiosInstance";
-// import toast, { Toaster } from "react-hot-toast";
-// import { User, Mail, Phone, Lock } from "lucide-react";
-
-// export default function ProfilePage() {
-//   const [user, setUser] = useState({
-//     fullName: "",
-//     email: "",
-//     phone: "",
-//   });
-//   const [loading, setLoading] = useState(true);
-//   const [updating, setUpdating] = useState(false);
-
-//   useEffect(() => {
-//     const fetchUser = async () => {
-//       try {
-//         const res = await axiosInstance.get("/user/profile");
-//         setUser(res.data);
-//       } catch (err) {
-//         toast.error("Failed to load profile");
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     fetchUser();
-//   }, []);
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setUser((prev) => ({ ...prev, [name]: value }));
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setUpdating(true);
-//     try {
-//       await axiosInstance.put("/user/profile", user);
-//       toast.success("Profile updated successfully");
-//     } catch {
-//       toast.error("Failed to update profile");
-//     } finally {
-//       setUpdating(false);
-//     }
-//   };
-
-//   if (loading)
-//     return (
-//       <div className="flex items-center justify-center h-96">
-//         <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-//       </div>
-//     );
-
-//   return (
-//     <div className="p-6 max-w-3xl mx-auto">
-//       <Toaster position="top-right" />
-//       <h2 className="text-3xl font-bold text-gray-800 mb-6">My Profile</h2>
-
-//       <div className="bg-white shadow-xl rounded-2xl border border-gray-200 overflow-hidden">
-//         {/* Header */}
-//         <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 p-6 flex items-center gap-4">
-//           <div className="bg-white/20 p-4 rounded-full">
-//             <User className="text-white w-10 h-10" />
-//           </div>
-//           <div>
-//             <h3 className="text-white text-xl font-semibold">{user.fullName}</h3>
-//             <p className="text-indigo-200 text-sm">Update your profile information</p>
-//           </div>
-//         </div>
-
-//         {/* Form */}
-//         <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-6">
-//           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//             {/* Full Name */}
-//             <div className="relative">
-//               <User className="absolute top-3 left-3 w-5 h-5 text-indigo-500" />
-//               <input
-//                 type="text"
-//                 name="fullName"
-//                 value={user.fullName}
-//                 onChange={handleChange}
-//                 placeholder="Full Name"
-//                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-//               />
-//             </div>
-
-//             {/* Email */}
-//             <div className="relative">
-//               <Mail className="absolute top-3 left-3 w-5 h-5 text-indigo-500" />
-//               <input
-//                 type="email"
-//                 name="email"
-//                 value={user.email}
-//                 onChange={handleChange}
-//                 placeholder="Email"
-//                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-//               />
-//             </div>
-
-//             {/* Phone */}
-//             <div className="relative">
-//               <Phone className="absolute top-3 left-3 w-5 h-5 text-indigo-500" />
-//               <input
-//                 type="text"
-//                 name="phone"
-//                 value={user.phone}
-//                 onChange={handleChange}
-//                 placeholder="Phone"
-//                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-//               />
-//             </div>
-
-//             {/* Password (optional) */}
-//             <div className="relative">
-//               <Lock className="absolute top-3 left-3 w-5 h-5 text-indigo-500" />
-//               <input
-//                 type="password"
-//                 name="password"
-//                 onChange={handleChange}
-//                 placeholder="New Password"
-//                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-//               />
-//             </div>
-//           </div>
-
-//           {/* Update Button */}
-//           <button
-//             type="submit"
-//             disabled={updating}
-//             className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-indigo-700 transition-all w-full md:w-1/3 text-center"
-//           >
-//             {updating ? "Updating..." : "Update Profile"}
-//           </button>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// }
-
-
-//------------------------------------------------------------
-
 
 import React, { useState, useEffect } from "react";
 import { Camera } from "lucide-react";
@@ -160,13 +18,12 @@ export default function ProfilePage() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    const states = ["Maharashtra", "Gujarat", "Karnataka", "Delhi"];
 
     // Fetch user data from API
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await axiosInstance.get("/Auth/me");
+                const response = await axiosInstance.get("/auth/me");
                 const data = response.data;
 
                 setUser({

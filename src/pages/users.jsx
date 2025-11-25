@@ -9,7 +9,7 @@ export default function Users() {
     const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingUser, setEditingUser] = useState(null);
-    const [showPassword, setShowPassword] = useState(false);
+
 
     const [formData, setFormData] = useState({
         full_name: "",
@@ -185,7 +185,7 @@ export default function Users() {
                             ))}
 
                             {/* Password with eye toggle */}
-                            <div>
+                            {/* <div>
                                 <label className="block text-sm font-medium text-gray-600 mb-1">PASSWORD</label>
                                 <div className="relative">
                                     <input
@@ -202,7 +202,7 @@ export default function Users() {
                                         {showPassword ? <EyeOff /> : <Eye />}
                                     </button>
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* Role */}
                             <div>

@@ -53,21 +53,22 @@ export const resetPassword = async (email, resetToken, newPassword) => {
     throw err;
   }
 };
-
-
 export const logout = async () => {
   try {
     const token = localStorage.getItem("authToken");
+
     if (!token) {
       toast.error("Already logged out!");
       return;
     }
-    await axiosInstance.post("/Auth/logout", JSON.stringify(token));
+
+    // await axiosInstance.post("/api/auth/logout"); // Removed JSON.stringify(token)
+
     localStorage.removeItem("authToken");
     toast.success("Logout successful!");
   } catch (err) {
     toast.error(err.response?.data?.message || "Logout failed!");
-    throw err;
   }
 };
-export const authme = () => axiosInstance.get("/Auth/me");
+
+export const authme = () => axiosInstance.get("/api/auth/me");

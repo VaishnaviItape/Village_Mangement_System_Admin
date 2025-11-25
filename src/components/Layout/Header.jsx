@@ -70,24 +70,35 @@ export default function Header({ sidebarCollapsed, onToggleSidebar }) {
   }, []);
 
   // Fetch user data
+  // Fetch user data
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axiosInstance.get("/Auth/me");
+        const response = await axiosInstance.get("/api/auth/me");
         const data = response.data;
-        setUser({
-          fullName: data.fullName || "User",
-          role: data.roles ? data.roles[0] : "User",
-        });
-        sessionStorage.setItem("userId", data.id);
-        sessionStorage.setItem("fullName", data.fullName || "User");
+
+        if (data.success && data.user) {
+          const userData = data.user;
+
+          setUser({
+            fullName: userData.full_name,
+            role: userData.role,
+          });
+
+          sessionStorage.setItem("userId", userData.id);
+          sessionStorage.setItem("fullName", userData.full_name);
+          sessionStorage.setItem("role", userData.role);
+        }
       } catch (error) {
         console.error("Failed to fetch user:", error);
         toast.error("Failed to load user data");
       }
     };
+
     fetchUser();
   }, []);
+
+
 
   // Fetch inactive clients
   useEffect(() => {
@@ -258,9 +269,9 @@ export default function Header({ sidebarCollapsed, onToggleSidebar }) {
             >
               <img
                 src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                  user.fullName
+                  user.fullName || "User"
                 )}&background=3b82f6&color=fff`}
-                alt={user.fullName}
+
                 className="w-8 h-8 rounded-full ring-2 ring-blue-400"
               />
               <div className="hidden md:flex flex-col text-left">
