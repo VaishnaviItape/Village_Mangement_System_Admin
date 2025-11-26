@@ -17,9 +17,9 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../services/axiosInstance"; // import API instance
 import toast from "react-hot-toast";
 
-export default function Header({ sidebarCollapsed, onToggleSidebar }) {
+export default function Header({ onToggleSidebar }) {
   const [open, setOpen] = useState(false);
-  const [inactiveClients, setInactiveClients] = useState([]);
+  const [setInactiveClients] = useState([]);
   const [user, setUser] = useState({ fullName: "", role: "" });
   const navigate = useNavigate();
   const menuRef = useRef(null);
@@ -32,8 +32,8 @@ export default function Header({ sidebarCollapsed, onToggleSidebar }) {
     setNotifOpen(!notifOpen);
   };
 
-  const handleMessageClick = (msg) => {
-    openConversation(msg); // your existing function
+  const handleMessageClick = () => {
+
     setNotifOpen(false);
   };
   useEffect(() => {
@@ -128,17 +128,12 @@ export default function Header({ sidebarCollapsed, onToggleSidebar }) {
   }, []);
 
 
-  const handleClientClick = (id) => {
-    if (!id) return;
-    navigate(`/all-clients/${id}`);
-    setNotifOpen(false);
-  };
 
   const handleLogout = async () => {
     try {
       await logout();
       navigate("/login", { replace: true });
-    } catch (error) {
+    } catch {
       alert("Logout failed. Try again.");
     }
   };

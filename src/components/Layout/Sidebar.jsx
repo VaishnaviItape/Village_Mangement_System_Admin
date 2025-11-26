@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
@@ -79,15 +79,15 @@ const menuItems = [
   },
 
   // Messages
-  {
-    id: "messages",
-    icon: Database,
-    label: "Messages",
-    submenu: [{ id: "mymessages", label: "My Messages", icon: Zap }],
-  },
+  // {
+  //   id: "messages",
+  //   icon: Database,
+  //   label: "Messages",
+  //   submenu: [{ id: "mymessages", label: "My Messages", icon: Zap }],
+  // },
 ];
 
-export default function Sidebar({ collapsed, onToggle }) {
+export default function Sidebar({ collapsed }) {
   const [expandedItems, setExpandedItems] = useState(new Set());
   const [hovered, setHovered] = useState(false);
 
@@ -95,7 +95,7 @@ export default function Sidebar({ collapsed, onToggle }) {
   const [user, setUser] = useState({ full_name: "", role: "" });
 
   const navigate = useNavigate();
-  const location = useLocation();
+
   const [activeMenu, setActiveMenu] = useState("dashboard");
 
   const sidebarWidth = collapsed ? (hovered ? 288 : 80) : 288;
@@ -120,13 +120,6 @@ export default function Sidebar({ collapsed, onToggle }) {
     fetchUser();
   }, []);
 
-  const toggleExpanded = (itemId) => {
-    setExpandedItems((prev) => {
-      const newSet = new Set(prev);
-      newSet.has(itemId) ? newSet.delete(itemId) : newSet.add(itemId);
-      return newSet;
-    });
-  };
 
   const handleMenuClick = (item) => {
     setActiveMenu(item.id);

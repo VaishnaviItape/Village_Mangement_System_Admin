@@ -1,3 +1,3 @@
 import axiosInstance from "./axiosInstance";
 
-export const getDashboardData = () => axiosInstance.get("/Tenants/dashboard_view");
+export const getDashboardData = () => axiosInstance.get("/api/dashboard");
