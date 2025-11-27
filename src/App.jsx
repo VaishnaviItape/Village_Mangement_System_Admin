@@ -100,6 +100,7 @@ import PropertyPage from "./pages/PropertyPage.jsx";
 import SchemeApplicationsPage from "./pages/SchemeApplicationsPage.jsx";
 import Schemes from "./pages/Schemes.jsx";
 import TaxPage from "./pages/TaxPage.jsx";
+import ChatBot from "./pages/ChatBot.jsx";
 export default function App() {
   const [sideBarCollapsed, setSideBarCollapsed] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("authToken"));
@@ -338,6 +339,16 @@ export default function App() {
             <ProtectedRoute>
               <Layout>
                 <TaxPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chatbot"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ChatBot />
               </Layout>
             </ProtectedRoute>
           }

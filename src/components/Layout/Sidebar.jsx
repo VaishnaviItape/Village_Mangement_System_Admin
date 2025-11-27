@@ -25,7 +25,7 @@ const menuItems = [
   // Basic Modules
   { id: "users", label: "Users", icon: Users },
   { id: "village", icon: MapPin, label: "Village" },
-
+  { id: "chatbot", icon: MapPin, label: "chatbot" },
   // Citizen & Applications
   {
     id: "citizen-section",
