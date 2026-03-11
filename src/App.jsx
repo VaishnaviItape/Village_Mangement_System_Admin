@@ -158,7 +158,7 @@ export default function App() {
           }
         />
         <Route
-          path="/village"
+          path="/village1"
           element={
             <ProtectedRoute>
               <Layout>
