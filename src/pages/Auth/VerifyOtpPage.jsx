@@ -204,7 +204,7 @@ export default function VerifyOtpPage() {
                             placeholder="6-digit OTP"
                             className="w-full px-4 py-3 rounded-xl bg-gray-100 text-gray-800 
                                 placeholder-gray-500 focus:outline-none 
-                                focus:ring-2 focus:ring-indigo-400 focus:bg-white transition"
+                                focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition"
                             required
                         />
 

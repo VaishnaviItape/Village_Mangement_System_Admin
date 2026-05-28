@@ -32,11 +32,11 @@ export default function LoginPage({ onLogin }) {
             toast.success("Login successful!");
             console.log("Token / Data:", res.data);
 
-            // ✅ Save token in localStorage
+            // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Save token in localStorage
             const token = res.data.token; // ya API ka jo actual token field hai
             localStorage.setItem("authToken", token);
 
-            // ✅ call onLogin with token/data if needed
+            // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ call onLogin with token/data if needed
             onLogin?.(res.data);
             navigate("/dashboard", { replace: true });
         } catch (err) {
@@ -56,9 +56,9 @@ export default function LoginPage({ onLogin }) {
             />
 
             {/* Animated Background Shapes */}
-            <div className="absolute top-[-100px] left-[-100px] w-72 h-72 bg-purple-300 rounded-full opacity-30 animate-ping-slow"></div>
-            <div className="absolute bottom-[-120px] right-[-100px] w-96 h-96 bg-indigo-400 rounded-full opacity-20 animate-spin-slow"></div>
-            <div className="absolute top-[150px] right-[-80px] w-56 h-56 bg-pink-300 rounded-full opacity-20 animate-bounce-slow"></div>
+            <div className="absolute top-[-100px] left-[-100px] w-72 h-72 bg-emerald-300 rounded-full opacity-30 animate-ping-slow"></div>
+            <div className="absolute bottom-[-120px] right-[-100px] w-96 h-96 bg-stone-400 rounded-full opacity-20 animate-spin-slow"></div>
+            <div className="absolute top-[150px] right-[-80px] w-56 h-56 bg-amber-300 rounded-full opacity-20 animate-bounce-slow"></div>
 
             {/* Left Side Image */}
             <div
@@ -75,7 +75,7 @@ export default function LoginPage({ onLogin }) {
 
                     {/* Username */}
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-600 mb-1">
+                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                             Username
                         </label>
                         <input
@@ -85,13 +85,13 @@ export default function LoginPage({ onLogin }) {
                             onChange={(e) =>
                                 setFormData({ ...formData, username: e.target.value })
                             }
-                            className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition duration-300"
+                            className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition duration-300"
                         />
                     </div>
 
                     {/* Password */}
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-600 mb-1">
+                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                             Password
                         </label>
                         <input
@@ -101,7 +101,7 @@ export default function LoginPage({ onLogin }) {
                             onChange={(e) =>
                                 setFormData({ ...formData, password: e.target.value })
                             }
-                            className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition duration-300"
+                            className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition duration-300"
                         />
                     </div>
 
@@ -117,7 +117,7 @@ export default function LoginPage({ onLogin }) {
                         onClick={() => navigate("/forgot-password")}
                         className="flex justify-end mb-4 cursor-pointer"
                     >
-                        <span className="text-sm text-indigo-600 hover:underline">
+                        <span className="text-sm text-emerald-600 hover:underline">
                             Forgot password?
                         </span>
                     </div>
@@ -126,7 +126,7 @@ export default function LoginPage({ onLogin }) {
                     <button
                         onClick={handleLogin}
                         disabled={loading}
-                        className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 rounded-xl font-medium hover:from-indigo-700 hover:to-purple-700 transition-all transform active:scale-95"
+                        className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 text-white py-2 rounded-xl font-medium hover:from-emerald-700 hover:to-emerald-800 transition-all transform active:scale-95"
                     >
                         {loading ? "Logging in..." : "Login"}
                     </button>
@@ -134,8 +134,8 @@ export default function LoginPage({ onLogin }) {
 
                 {/* Optional Footer */}
                 <p className="mt-6 text-sm text-gray-500">
-                    Don’t have an account?{" "}
-                    <a href="#" className="text-indigo-600 hover:underline">
+                    DonÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢t have an account?{" "}
+                    <a href="#" className="text-emerald-600 hover:underline">
                         Sign up
                     </a>
                 </p>

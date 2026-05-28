@@ -63,13 +63,13 @@ export default function ComplaintPage() {
                 columns={columns}
                 data={complaints}
                 showSerial={true}
-                hideActions={true} // 🚨 THIS HIDES Add/Edit/Delete
+                hideActions={true} // ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â¡Ãƒâ€šÃ‚Â¨ THIS HIDES Add/Edit/Delete
             />
 
             {/* Loader */}
             {loading && (
                 <div className="fixed inset-0 flex items-center justify-center bg-white/50 z-50">
-                    <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
                 </div>
             )}
         </div>

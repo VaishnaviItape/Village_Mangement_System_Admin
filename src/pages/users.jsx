@@ -145,13 +145,16 @@ export default function Users() {
             {/* Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-2xl shadow-xl w-[460px] max-h-[90vh] overflow-y-auto p-6">
+                    <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 w-[460px] max-h-[90vh] flex flex-col overflow-hidden">
 
-                        <h2 className="text-lg font-bold mb-4">
-                            {editingUser ? "Edit User" : "Add User"}
-                        </h2>
+                        {/* Modal Header */}
+                        <div className="border-b border-slate-200 px-6 py-4 bg-slate-50 flex items-center justify-between">
+                            <h2 className="text-lg font-bold text-slate-800">
+                                {editingUser ? "Edit User" : "Add User"}
+                            </h2>
+                        </div>
 
-                        <div className="space-y-4">
+                        <div className="p-6 overflow-y-auto space-y-4">
 
                             {/* Image Upload */}
                             <div className="flex flex-col items-center">
@@ -159,7 +162,7 @@ export default function Users() {
                                     {previewImage ? (
                                         <img src={previewImage} alt="Preview" className="w-24 h-24 rounded-full border" />
                                     ) : (
-                                        <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center text-gray-400">
+                                        <div className="w-24 h-24 rounded-full bg-slate-100 hover:bg-slate-200 transition flex items-center justify-center text-slate-400 border border-dashed border-slate-300">
                                             <Upload size={30} />
                                         </div>
                                     )}
@@ -171,14 +174,14 @@ export default function Users() {
                             {["full_name", "username", "email", "profile_image"].map(field => (
                                 field !== "profile_image" && (
                                     <div key={field}>
-                                        <label className="block text-sm font-medium text-gray-600 mb-1">
+                                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                                             {field.replace("_", " ").toUpperCase()}
                                         </label>
                                         <input
                                             type="text"
                                             value={formData[field]}
                                             onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
-                                            className="w-full border rounded-lg px-3 py-2"
+                                            className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
                                         />
                                     </div>
                                 )
@@ -186,13 +189,13 @@ export default function Users() {
 
                             {/* Password with eye toggle */}
                             {/* <div>
-                                <label className="block text-sm font-medium text-gray-600 mb-1">PASSWORD</label>
+                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">PASSWORD</label>
                                 <div className="relative">
                                     <input
                                         type={showPassword ? "text" : "password"}
                                         value={formData.password}
                                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                        className="w-full border rounded-lg px-3 py-2"
+                                        className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
                                     />
                                     <button
                                         type="button"
@@ -206,11 +209,11 @@ export default function Users() {
 
                             {/* Role */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-600 mb-1">ROLE</label>
+                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">ROLE</label>
                                 <select
                                     value={formData.role}
                                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                                    className="w-full border rounded-lg px-3 py-2"
+                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
                                 >
                                     <option value="admin">Admin</option>
                                     <option value="superadmin">Superadmin</option>
@@ -219,11 +222,11 @@ export default function Users() {
 
                             {/* Status */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-600 mb-1">STATUS</label>
+                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">STATUS</label>
                                 <select
                                     value={formData.is_active}
                                     onChange={(e) => setFormData({ ...formData, is_active: e.target.value })}
-                                    className="w-full border rounded-lg px-3 py-2"
+                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
                                 >
                                     <option value={1}>Active</option>
                                     <option value={0}>Inactive</option>
@@ -232,12 +235,12 @@ export default function Users() {
                         </div>
 
                         {/* Buttons */}
-                        <div className="flex justify-end space-x-3 mt-6">
-                            <button onClick={() => setIsModalOpen(false)} className="bg-gray-500 text-white px-4 py-2 rounded-lg">
+                        <div className="flex justify-end space-x-3 mt-6 pt-4 border-t border-slate-100">
+                            <button onClick={() => setIsModalOpen(false)} className="bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 px-5 py-2.5 rounded-xl shadow-sm transition-colors font-medium">
                                 Cancel
                             </button>
-                            <button onClick={handleSave} className="bg-green-600 text-white px-4 py-2 rounded-lg">
-                                {editingUser ? "Update" : "Add"}
+                            <button onClick={handleSave} className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl shadow-sm transition-colors font-medium">
+                                {editingUser ? "Update" : "Add User"}
                             </button>
                         </div>
                     </div>

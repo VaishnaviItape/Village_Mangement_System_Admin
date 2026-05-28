@@ -119,14 +119,14 @@ export default function StatePage() {
             {/* Loader */}
             {loading && (
                 <div className="fixed inset-0 flex items-center justify-center bg-white/50 z-50">
-                    <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
                 </div>
             )}
 
             {/* Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-2xl shadow-xl w-[450px] p-6">
+                    <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 w-[450px] p-6">
                         <h2 className="text-lg font-bold mb-4">
                             {editingState ? "Edit State" : "Add State"}
                         </h2>
@@ -134,7 +134,7 @@ export default function StatePage() {
                         <div className="space-y-4">
                             {/* State Code */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-600 mb-1">
+                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                                     State Code
                                 </label>
                                 <input
@@ -143,13 +143,13 @@ export default function StatePage() {
                                     onChange={(e) =>
                                         setFormData({ ...formData, state_code: e.target.value })
                                     }
-                                    className="w-full border rounded-lg px-3 py-2"
+                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
                                 />
                             </div>
 
                             {/* State Name */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-600 mb-1">
+                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                                     State Name
                                 </label>
                                 <input
@@ -158,13 +158,13 @@ export default function StatePage() {
                                     onChange={(e) =>
                                         setFormData({ ...formData, state_name: e.target.value })
                                     }
-                                    className="w-full border rounded-lg px-3 py-2"
+                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
                                 />
                             </div>
 
                             {/* Active Toggle */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-600 mb-1">
+                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                                     Active Status
                                 </label>
                                 <select
@@ -172,7 +172,7 @@ export default function StatePage() {
                                     onChange={(e) =>
                                         setFormData({ ...formData, is_active: Number(e.target.value) })
                                     }
-                                    className="w-full border rounded-lg px-3 py-2"
+                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
                                 >
                                     <option value={1}>Active</option>
                                     <option value={0}>Inactive</option>
@@ -183,13 +183,13 @@ export default function StatePage() {
                         <div className="flex justify-end space-x-3 mt-6">
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="bg-gray-500 text-white px-4 py-2 rounded-lg"
+                                className="bg-stone-500 hover:bg-stone-600 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleSave}
-                                className="bg-green-600 text-white px-4 py-2 rounded-lg"
+                                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
                             >
                                 {editingState ? "Update" : "Add"}
                             </button>

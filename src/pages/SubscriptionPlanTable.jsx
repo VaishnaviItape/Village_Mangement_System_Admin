@@ -27,7 +27,7 @@ export default function SubscriptionPlanTable() {
     supportIncluded: false,
   });
 
-  // ✅ Fetch Plans
+  // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Fetch Plans
   const fetchPlans = async () => {
     setLoading(true);
     try {
@@ -35,8 +35,8 @@ export default function SubscriptionPlanTable() {
       const safeData = Array.isArray(data) ? data : [];
       const formattedPlans = safeData.map((x) => ({
         ...x,
-        price: `₹${x.price}`,                     // ₹ add
-        //supportIncluded: x.supportIncluded ? "✅ Yes" : "❌ No", // boolean to string
+        price: `ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¹${x.price}`,                     // ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¹ add
+        //supportIncluded: x.supportIncluded ? "ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Yes" : "ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒâ€¦Ã¢â‚¬â„¢ No", // boolean to string
       }));
       setPlans(formattedPlans);
     } catch (err) {
@@ -51,7 +51,7 @@ export default function SubscriptionPlanTable() {
     fetchPlans();
   }, []);
 
-  // ✅ Save Plan (Add / Update)
+  // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Save Plan (Add / Update)
   const handleSave = async () => {
     if (!formData.name || !formData.price) {
       toast.error("All fields required!");
@@ -82,7 +82,7 @@ export default function SubscriptionPlanTable() {
     }
   };
 
-  // 🗑️ Delete Plan
+  // ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬ÂÃƒÂ¢Ã¢â€šÂ¬Ã‹Å“ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¸Ãƒâ€šÃ‚Â Delete Plan
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this plan?")) return;
     try {
@@ -95,7 +95,7 @@ export default function SubscriptionPlanTable() {
     }
   };
 
-  // ♻️ Reset Form
+  // ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢Ãƒâ€šÃ‚Â»ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¸Ãƒâ€šÃ‚Â Reset Form
   const resetForm = () => {
     setFormData({
       name: "",
@@ -109,18 +109,18 @@ export default function SubscriptionPlanTable() {
     });
   };
 
-  // ✏️ Edit
+  // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¸Ãƒâ€šÃ‚Â Edit
   const handleEdit = (plan) => {
     setEditingPlan(plan);
     setFormData({
       ...plan,
-      price: parseFloat(plan.price.replace("₹", "")), // Remove ₹ for editing
-      supportIncluded: plan.supportIncluded === "✅ Yes", // Convert back to boolean
+      price: parseFloat(plan.price.replace("ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¹", "")), // Remove ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¹ for editing
+      supportIncluded: plan.supportIncluded === "ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Yes", // Convert back to boolean
     });
     setShowModal(true);
   };
 
-  // ➕ Add
+  // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã‚Â¾ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Add
   const handleAdd = () => {
     setEditingPlan(null);
     resetForm();
@@ -141,7 +141,7 @@ export default function SubscriptionPlanTable() {
       cell: (row) => {
         const isYes =
           row.supportIncluded === true ||
-          row.supportIncluded === "✅ Yes" ||
+          row.supportIncluded === "ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Yes" ||
           row.supportIncluded === "Yes";
 
         return (
@@ -177,7 +177,7 @@ export default function SubscriptionPlanTable() {
 
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-white/40 z-50">
-          <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
 
@@ -194,7 +194,7 @@ export default function SubscriptionPlanTable() {
                 placeholder="Plan Name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
               />
 
               <input
@@ -202,13 +202,13 @@ export default function SubscriptionPlanTable() {
                 placeholder="Price"
                 value={formData.price}
                 onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
               />
 
               <select
                 value={formData.billingCycle}
                 onChange={(e) => setFormData({ ...formData, billingCycle: e.target.value })}
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
               >
                 <option value="Monthly">Monthly</option>
                 <option value="Yearly">Yearly</option>

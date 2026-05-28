@@ -133,7 +133,7 @@ export default function Schemes() {
                                 placeholder="Scheme Name"
                                 value={formData.scheme_name}
                                 onChange={(e) => setFormData({ ...formData, scheme_name: e.target.value })}
-                                className="w-full border rounded-lg px-3 py-2"
+                                className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
                             />
 
                             <textarea
@@ -141,7 +141,7 @@ export default function Schemes() {
                                 placeholder="Eligibility Criteria (JSON)"
                                 value={formData.eligibility_criteria}
                                 onChange={(e) => setFormData({ ...formData, eligibility_criteria: e.target.value })}
-                                className="w-full border rounded-lg px-3 py-2 font-mono"
+                                className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm font-mono"
                             />
 
                             <textarea
@@ -149,7 +149,7 @@ export default function Schemes() {
                                 placeholder="Description"
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                className="w-full border rounded-lg px-3 py-2"
+                                className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
                             />
 
                             <div className="grid grid-cols-2 gap-3">
@@ -171,7 +171,7 @@ export default function Schemes() {
                             <select
                                 value={formData.status}
                                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                className="w-full border rounded-lg px-3 py-2"
+                                className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
                             >
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
@@ -179,10 +179,10 @@ export default function Schemes() {
                         </div>
 
                         <div className="flex justify-end gap-3 mt-6">
-                            <button onClick={() => setIsModalOpen(false)} className="bg-gray-500 text-white px-4 py-2 rounded-lg">
+                            <button onClick={() => setIsModalOpen(false)} className="bg-stone-500 hover:bg-stone-600 text-white px-4 py-2 rounded-lg shadow-sm transition-colors">
                                 Cancel
                             </button>
-                            <button onClick={handleSave} className="bg-green-600 text-white px-4 py-2 rounded-lg">
+                            <button onClick={handleSave} className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-sm transition-colors">
                                 {editingScheme ? "Update" : "Add"}
                             </button>
                         </div>

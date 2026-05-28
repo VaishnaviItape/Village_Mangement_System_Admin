@@ -43,7 +43,7 @@
 //           />
 //           <button
 //             type="submit"
-//             className="w-full bg-white text-indigo-600 font-semibold py-3 rounded-lg hover:bg-indigo-50 transition"
+//             className="w-full bg-white text-emerald-600 font-semibold py-3 rounded-lg hover:bg-indigo-50 transition"
 //           >
 //             Send OTP
 //           </button>
@@ -138,7 +138,7 @@ export default function ForgotPasswordPage() {
               placeholder="Enter Email Address"
               className="w-full px-4 py-3 rounded-xl bg-gray-100 text-gray-800 
                 placeholder-gray-500 focus:outline-none 
-                focus:ring-2 focus:ring-indigo-400 focus:bg-white transition"
+                focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition"
               required
             />
 
@@ -157,7 +157,7 @@ export default function ForgotPasswordPage() {
           </form>
 
           <p className="text-center text-gray-500 text-sm mt-4">
-             If you don’t receive the email, check spam or try again.
+             If you donÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢t receive the email, check spam or try again.
           </p>
         </div>
       </div>

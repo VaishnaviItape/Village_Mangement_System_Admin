@@ -50,7 +50,7 @@
 //   return (
 //     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 p-6">
 //       <Toaster position="top-right" />
-//       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
+//       <div className="bg-white rounded-2xl shadow-2xl w-full border border-slate-100 max-w-md p-8">
 //         <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
 //           Reset Password
 //         </h2>
@@ -64,7 +64,7 @@
 //               value={form.email}
 //               onChange={handleChange}
 //               placeholder="Enter your email"
-//               className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+//               className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
 //               required
 //             />
 //           </div>
@@ -77,7 +77,7 @@
 //               value={form.resetToken}
 //               onChange={handleChange}
 //               placeholder="Enter reset token"
-//               className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+//               className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
 //               required
 //             />
 //           </div>
@@ -90,7 +90,7 @@
 //               value={form.newPassword}
 //               onChange={handleChange}
 //               placeholder="Enter new password"
-//               className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+//               className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
 //               required
 //             />
 //           </div>
@@ -103,7 +103,7 @@
 //               value={form.confirmPassword}
 //               onChange={handleChange}
 //               placeholder="Confirm new password"
-//               className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+//               className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
 //               required
 //             />
 //           </div>
@@ -216,7 +216,7 @@ export default function ResetPasswordPage() {
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="New password"
                 className="w-full px-4 py-3 rounded-xl bg-gray-100 text-gray-800 placeholder-gray-500
-                           focus:outline-none focus:ring-2 focus:ring-indigo-400 transition pr-10"
+                           focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition pr-10"
                 required
               />
               <button
@@ -237,7 +237,7 @@ export default function ResetPasswordPage() {
                 className={`w-full px-4 py-3 rounded-xl bg-gray-100 text-gray-800 placeholder-gray-500
                   focus:outline-none focus:ring-2 transition pr-10 ${
                     match === null
-                      ? "focus:ring-indigo-400"
+                      ? "focus:ring-emerald-500 focus:border-emerald-500"
                       : match
                       ? "ring-2 ring-emerald-400"
                       : "ring-2 ring-red-400"

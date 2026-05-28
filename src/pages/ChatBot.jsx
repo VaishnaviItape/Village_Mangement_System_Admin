@@ -39,7 +39,7 @@ export default function ChatBot() {
             console.error(error);
             setMessages((prev) => [
                 ...prev,
-                { sender: "bot", text: "❌ Error: Could not connect to server." }
+                { sender: "bot", text: "ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒâ€¦Ã¢â‚¬â„¢ Error: Could not connect to server." }
             ]);
         }
     };

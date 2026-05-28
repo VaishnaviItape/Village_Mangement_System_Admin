@@ -49,13 +49,13 @@ export default function ChangePasswordPage() {
         newPassword: form.newPassword,
       });
 
-      toast.success("✅ Password changed successfully!");
+      toast.success("ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦ Password changed successfully!");
       setForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
     } catch (err) {
       const msg =
         err.response?.data?.message ||
         err.response?.data?.Message ||
-        "⚠️ Failed to change password. Please try again.";
+        "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â Failed to change password. Please try again.";
       toast.error(msg);
     } finally {
       setLoading(false);
@@ -66,9 +66,9 @@ export default function ChangePasswordPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 p-6">
       <Toaster position="top-right" />
 
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 transform transition-all duration-300 hover:scale-[1.01]">
+      <div className="bg-white rounded-2xl shadow-2xl w-full border border-slate-100 max-w-md p-8 transform transition-all duration-300 hover:scale-[1.01]">
         <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center font-bahnschrift">
-          Change Password 🔐
+          Change Password ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â
         </h2>
 
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -83,7 +83,7 @@ export default function ChangePasswordPage() {
               value={form.currentPassword}
               onChange={handleChange}
               placeholder="Enter current password"
-              className="border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               required
             />
             <button
@@ -108,7 +108,7 @@ export default function ChangePasswordPage() {
               value={form.newPassword}
               onChange={handleChange}
               placeholder="Enter new password"
-              className="border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               required
             />
             <button
@@ -138,7 +138,7 @@ export default function ChangePasswordPage() {
                   ? "border-red-400 focus:ring-red-400"
                   : matchStatus === true
                   ? "border-emerald-400 focus:ring-emerald-400"
-                  : "border-gray-300 focus:ring-indigo-500"
+                  : "border-gray-300 focus:ring-emerald-500"
               }`}
               required
             />
@@ -159,8 +159,8 @@ export default function ChangePasswordPage() {
                 }`}
               >
                 {matchStatus
-                  ? "✅ Passwords match"
-                  : "⚠️ Passwords do not match"}
+                  ? "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦ Passwords match"
+                  : "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â Passwords do not match"}
               </p>
             )}
           </div>

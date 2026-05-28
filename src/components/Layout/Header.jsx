@@ -139,7 +139,7 @@ export default function Header({ onToggleSidebar }) {
   };
 
   return (
-    <div className="bg-white border-b border-slate-200 px-6 py-4 shadow-sm">
+    <div className="bg-white/90 backdrop-blur-md px-6 py-4 shadow-sm border-b border-slate-200 z-10">
       <div className="flex items-center justify-between">
         {/* Left Section */}
         <div className="flex items-center space-x-4">
@@ -260,14 +260,14 @@ export default function Header({ onToggleSidebar }) {
           <div className="relative ml-3" ref={menuRef}>
             <button
               onClick={() => setOpen(!open)}
-              className="flex items-center gap-2 p-2 rounded-xl hover:bg-blue-50 transition-colors"
+              className="flex items-center gap-2 p-2 rounded-xl hover:bg-emerald-50 transition-colors"
             >
               <img
                 src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
                   user.fullName || "User"
-                )}&background=3b82f6&color=fff`}
+                )}&background=059669&color=fff`}
 
-                className="w-8 h-8 rounded-full ring-2 ring-blue-400"
+                className="w-8 h-8 rounded-full ring-2 ring-emerald-400"
               />
               <div className="hidden md:flex flex-col text-left">
                 <span className="text-sm font-semibold text-slate-700">
@@ -283,22 +283,22 @@ export default function Header({ onToggleSidebar }) {
 
             {open && (
               <div
-                className="absolute right-0 mt-2 w-52 bg-gradient-to-br from-blue-50 to-violet-100 shadow-lg rounded-2xl border border-blue-200 transform transition-all duration-200 z-50 animate-fadeIn"
+                className="absolute right-0 mt-2 w-52 bg-gradient-to-br from-emerald-50 to-stone-100 shadow-lg rounded-2xl border border-emerald-200 transform transition-all duration-200 z-50 animate-fadeIn"
               >
                 <div className="py-2">
                   <button
                     onClick={() => navigate("/profile")}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-blue-100 rounded-md transition-all hover:translate-x-1"
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-emerald-100 rounded-md transition-all hover:translate-x-1"
                   >
-                    <User className="w-4 h-4 text-blue-500" />
+                    <User className="w-4 h-4 text-emerald-600" />
                     Profile
                   </button>
 
                   <button
                     onClick={() => navigate("/settings")}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-blue-100 rounded-md transition-all hover:translate-x-1"
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-emerald-100 rounded-md transition-all hover:translate-x-1"
                   >
-                    <Settings className="w-4 h-4 text-blue-500 rotate-hover" />
+                    <Settings className="w-4 h-4 text-emerald-600 rotate-hover" />
                     Settings
                   </button>
 

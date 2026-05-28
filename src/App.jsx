@@ -120,18 +120,27 @@ export default function App() {
 
   // ✅ Layout for sidebar + header + content
   const Layout = ({ children }) => (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-stone-50">
       <Sidebar
         collapsed={sideBarCollapsed}
         onToggle={() => setSideBarCollapsed(!sideBarCollapsed)}
       />
-      <div className="flex-1 flex flex-col overflow-hidden bg-orange-50">
-        {/* 🔶 light orange background */}
+      <div className="flex-1 flex flex-col overflow-hidden">
         <Header
           sidebarCollapsed={sideBarCollapsed}
           onToggleSidebar={() => setSideBarCollapsed(!sideBarCollapsed)}
         />
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <main 
+          className="flex-1 overflow-y-auto relative"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          <style>{`
+            main::-webkit-scrollbar {
+              display: none;
+            }
+          `}</style>
+          {children}
+        </main>
       </div>
     </div>
   );

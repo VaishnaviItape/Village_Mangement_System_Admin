@@ -14,7 +14,8 @@ import {
   FileCheck,
   Ticket,
   Landmark,
-  Percent
+  Percent,
+  MessageSquare
 } from "lucide-react";
 import iconLogin from "../../assets/favicon.png";
 import axiosInstance from "../../services/axiosInstance";
@@ -25,7 +26,8 @@ const menuItems = [
   // Basic Modules
   { id: "users", label: "Users", icon: Users },
   { id: "village", icon: MapPin, label: "Village" },
-  { id: "chatbot", icon: MapPin, label: "chatbot" },
+  { id: "chatbot", icon: MessageSquare, label: "Chatbot" },
+  
   // Citizen & Applications
   {
     id: "citizen-section",
@@ -138,24 +140,32 @@ export default function Sidebar({ collapsed }) {
 
   return (
     <div
-      className="flex flex-col h-screen bg-white border-r border-slate-200 shadow-md transition-all duration-500 ease-in-out"
+      className="flex flex-col h-screen bg-emerald-900 border-r border-emerald-800 shadow-xl transition-all duration-500 ease-in-out overflow-hidden"
       style={{ width: sidebarWidth }}
       onMouseEnter={() => collapsed && setHovered(true)}
       onMouseLeave={() => collapsed && setHovered(false)}
     >
       {/* Logo */}
-      <div className="p-6 border-b border-slate-200 flex items-center space-x-3">
+      <div className="p-6 border-b border-emerald-800 flex items-center space-x-3">
         <img src={iconLogin} alt="logo" className="w-12 h-12" />
         {sidebarWidth > 80 && (
           <div>
-            <h1 className="text-xl font-bold text-slate-800">Smart Village</h1>
-            <p className="text-xs text-slate-500">Admin Panel</p>
+            <h1 className="text-xl font-bold text-white">Smart Village</h1>
+            <p className="text-xs text-emerald-200">Admin Panel</p>
           </div>
         )}
       </div>
 
       {/* Menu Items */}
-      <div className="flex-1 p-4 space-y-1 overflow-y-auto">
+      <div 
+        className="flex-1 p-4 space-y-1 overflow-y-auto"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        <style>{`
+          div::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
         {menuItems.map((item) => {
           const isExpanded = expandedItems.has(item.id);
 
@@ -166,8 +176,8 @@ export default function Sidebar({ collapsed }) {
                   <button
                     onClick={() => handleMenuClick(item)}
                     className={`w-full flex items-center justify-between p-3 rounded-xl transition-all duration-200 ${activeMenu === item.id || isExpanded
-                      ? "bg-blue-500 text-white"
-                      : "text-slate-700 hover:bg-blue-100"
+                      ? "bg-emerald-700 text-white shadow-md shadow-emerald-900/50"
+                      : "text-emerald-100 hover:bg-emerald-800 hover:text-white"
                       }`}
                   >
                     <div className="flex items-center gap-3">
@@ -185,7 +195,7 @@ export default function Sidebar({ collapsed }) {
                   {/* Submenu */}
                   {sidebarWidth > 80 && (
                     <div
-                      className={`ml-6 mt-1 space-y-1 overflow-hidden transition-all duration-500 ${isExpanded ? "max-h-96" : "max-h-0"
+                      className={`ml-5 pl-3 mt-1 space-y-1 border-l-2 border-emerald-800/50 overflow-hidden transition-all duration-500 ${isExpanded ? "max-h-96 py-1" : "max-h-0"
                         }`}
                     >
                       {item.submenu.map((sub) => (
@@ -193,11 +203,11 @@ export default function Sidebar({ collapsed }) {
                           key={sub.id}
                           to={`/${sub.id}`}
                           className={({ isActive }) =>
-                            `flex items-center gap-2 p-2 text-sm rounded-lg ${isActive ? "bg-blue-500 text-white" : "hover:bg-blue-100"
+                            `flex items-center gap-3 px-3 py-2 text-sm rounded-xl transition-all duration-300 ${isActive ? "bg-emerald-800 text-white font-medium shadow-sm translate-x-1" : "text-emerald-200 hover:bg-emerald-800/40 hover:text-white hover:translate-x-1"
                             }`
                           }
                         >
-                          <sub.icon className="w-4 h-4" />
+                          <sub.icon className={`w-4 h-4 ${activeMenu === sub.id ? 'opacity-100 text-emerald-400' : 'opacity-70'}`} />
                           <span>{sub.label}</span>
                         </NavLink>
                       ))}
@@ -208,7 +218,7 @@ export default function Sidebar({ collapsed }) {
                 <NavLink
                   to={`/${item.id}`}
                   className={({ isActive }) =>
-                    `flex items-center p-3 rounded-xl ${isActive ? "bg-blue-500 text-white" : "text-slate-700 hover:bg-blue-100"
+                    `flex items-center p-3 rounded-xl transition-all duration-200 ${isActive ? "bg-emerald-700 text-white shadow-md shadow-emerald-900/50" : "text-emerald-100 hover:bg-emerald-800 hover:text-white"
                     }`
                   }
                 >
@@ -223,8 +233,8 @@ export default function Sidebar({ collapsed }) {
 
       {/* 🔹 User Section */}
       {sidebarWidth > 80 && (
-        <div className="p-4 border-t border-slate-200">
-          <div className="flex items-center space-x-3 p-3 rounded-xl bg-slate-100">
+        <div className="p-4 border-t border-emerald-800">
+          <div className="flex items-center space-x-3 p-3 rounded-xl bg-emerald-800">
             <img
               src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
                 user.full_name
@@ -233,8 +243,8 @@ export default function Sidebar({ collapsed }) {
               className="w-10 h-10 rounded-full"
             />
             <div>
-              <p className="text-sm font-bold">{user.full_name}</p>
-              <p className="text-xs text-gray-500">{user.role}</p>
+              <p className="text-sm font-bold text-white">{user.full_name}</p>
+              <p className="text-xs text-emerald-200">{user.role}</p>
             </div>
           </div>
         </div>

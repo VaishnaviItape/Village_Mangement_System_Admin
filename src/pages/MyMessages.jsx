@@ -106,7 +106,7 @@ export default function MessagesPage() {
 
       setConversationMessages(normalized);
 
-      // ✅ Mark unread messages as read
+      // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Mark unread messages as read
       normalized
         .filter((m) => !m.isRead)
         .forEach(async (m) => {
@@ -118,7 +118,7 @@ export default function MessagesPage() {
           }
         });
 
-      // ✅ Reset unread badge count for the conversation
+      // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Reset unread badge count for the conversation
       conv.unreadCount = 0;
       setFilteredMessageList([...filteredMessageList]);
 
@@ -312,7 +312,7 @@ export default function MessagesPage() {
                     .join(", ")}
                 </small>
               </div>
-              <button onClick={() => openConversation(selectedConversation)}>↻</button>
+              <button onClick={() => openConversation(selectedConversation)}>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Ãƒâ€šÃ‚Â»</button>
             </header>
 
             <div ref={scrollViewport} className="flex-1 p-4 overflow-y-auto space-y-3">
@@ -373,7 +373,7 @@ export default function MessagesPage() {
               {replyTo && (
                 <div className="bg-gray-200 p-2 rounded mb-2 flex justify-between items-center">
                   Replying to <b>{replyTo.senderName}</b>: {replyTo.body.slice(0, 40)}...
-                  <button onClick={() => setReplyTo(null)}>×</button>
+                  <button onClick={() => setReplyTo(null)}>ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â</button>
                 </div>
               )}
               <div className="flex gap-2">
