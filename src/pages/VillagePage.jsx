@@ -145,7 +145,7 @@ export default function VillagePage() {
                                         <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                                             {field.replace(/([A-Z])/g, " $1")}
                                         </label>
-                                        <input
+                                        <input placeholder="Enter value" 
                                             type={field === "Population" || field === "Area" ? "number" : "text"}
                                             value={formData[field]}
                                             onChange={(e) =>

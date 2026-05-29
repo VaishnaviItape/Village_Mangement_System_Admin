@@ -210,7 +210,7 @@ export default function ResetPasswordPage() {
           {/* Form */}
           <form onSubmit={handleReset} className="space-y-6">
             <div className="relative">
-              <input
+              <input placeholder="Enter value" 
                 type={show.new ? "text" : "password"}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
@@ -229,7 +229,7 @@ export default function ResetPasswordPage() {
             </div>
 
             <div className="relative">
-              <input
+              <input placeholder="Enter value" 
                 type={show.confirm ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}

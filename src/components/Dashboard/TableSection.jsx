@@ -1,15 +1,9 @@
 import React from "react";
 import { AlertCircle, CheckCircle2, Clock } from "lucide-react";
 
-// Mock Data representing Village Complaints/Requests
-const complaints = [
-    { id: "CMP-001", citizen: "Ramesh Patil", type: "Water Leakage", village: "Wadgaon", status: "Pending", date: "2023-10-01" },
-    { id: "CMP-002", citizen: "Suresh Deshmukh", type: "Street Light", village: "Palasdeo", status: "Resolved", date: "2023-10-02" },
-    { id: "CMP-003", citizen: "Anita Shinde", type: "Drainage", village: "Indapur", status: "In Progress", date: "2023-10-03" },
-    { id: "CMP-004", citizen: "Vijay Kale", type: "Property Tax", village: "Bhigwan", status: "Pending", date: "2023-10-04" },
-];
+function TableSection({ data }) {
+    const complaints = data || [];
 
-function TableSection() {
     const getStatusStyle = (status) => {
         switch (status) {
             case "Resolved": return "bg-emerald-100 text-emerald-700";
@@ -56,7 +50,7 @@ function TableSection() {
                                         {item.status}
                                     </span>
                                 </td>
-                                <td className="p-4 text-sm text-slate-500">{item.date}</td>
+                                <td className="p-4 text-sm text-slate-500">{item.date ? new Date(item.date).toLocaleDateString() : "N/A"}</td>
                             </tr>
                         ))}
                     </tbody>

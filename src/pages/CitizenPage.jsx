@@ -205,7 +205,7 @@ export default function CitizenPage() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {/* FULL NAME */}
                                 <Field label="Full Name">
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="text"
                                         value={formData.full_name}
                                         onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
@@ -215,7 +215,7 @@ export default function CitizenPage() {
 
                                 {/* FATHER NAME */}
                                 <Field label="Father Name">
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="text"
                                         value={formData.father_name}
                                         onChange={(e) => setFormData({ ...formData, father_name: e.target.value })}
@@ -225,7 +225,7 @@ export default function CitizenPage() {
 
                                 {/* EMAIL */}
                                 <Field label="Email">
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="email"
                                         value={formData.email}
                                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -235,7 +235,7 @@ export default function CitizenPage() {
 
                                 {/* MOBILE */}
                                 <Field label="Mobile">
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="tel"
                                         value={formData.mobile}
                                         onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
@@ -245,7 +245,7 @@ export default function CitizenPage() {
 
                                 {/* PASSWORD */}
                                 <Field label="Password">
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="password"
                                         value={formData.password}
                                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -282,7 +282,7 @@ export default function CitizenPage() {
 
                                 {/* DOB */}
                                 <Field label="Date of Birth">
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="date"
                                         value={formData.dob}
                                         onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
@@ -292,7 +292,7 @@ export default function CitizenPage() {
 
                                 {/* AADHAAR */}
                                 <Field label="Aadhaar No">
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="text"
                                         value={formData.aadhaar_no}
                                         onChange={(e) => setFormData({ ...formData, aadhaar_no: e.target.value })}
@@ -303,7 +303,7 @@ export default function CitizenPage() {
                                 {/* ADDRESS (full width) */}
                                 <div className="md:col-span-2">
                                     <Field label="Address">
-                                        <input
+                                        <input placeholder="Enter value" 
                                             type="text"
                                             value={formData.address}
                                             onChange={(e) => setFormData({ ...formData, address: e.target.value })}

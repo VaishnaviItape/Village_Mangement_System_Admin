@@ -137,7 +137,7 @@ export default function StatePage() {
                                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                                     State Code
                                 </label>
-                                <input
+                                <input placeholder="Enter value" 
                                     type="text"
                                     value={formData.state_code}
                                     onChange={(e) =>
@@ -152,7 +152,7 @@ export default function StatePage() {
                                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                                     State Name
                                 </label>
-                                <input
+                                <input placeholder="Enter value" 
                                     type="text"
                                     value={formData.state_name}
                                     onChange={(e) =>

@@ -238,7 +238,7 @@ export default function TaxPage() {
 
                                 {/* PROPERTY NUMBER */}
                                 <Field label="Property No">
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="text"
                                         value={formData.property_no}
                                         onChange={(e) =>
@@ -250,7 +250,7 @@ export default function TaxPage() {
 
                                 {/* TAX TYPE */}
                                 <Field label="Tax Type">
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="text"
                                         value={formData.tax_type}
                                         onChange={(e) =>
@@ -262,7 +262,7 @@ export default function TaxPage() {
 
                                 {/* AMOUNT */}
                                 <Field label="Amount">
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="number"
                                         value={formData.amount}
                                         onChange={(e) =>
@@ -274,7 +274,7 @@ export default function TaxPage() {
 
                                 {/* DUE DATE */}
                                 <Field label="Due Date">
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="date"
                                         value={formData.due_date}
                                         onChange={(e) =>

@@ -230,7 +230,7 @@ export default function PropertyPage() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                                 <Field label="Owner ID">
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="text"
                                         value={formData.owner_id}
                                         onChange={(e) =>
@@ -241,7 +241,7 @@ export default function PropertyPage() {
                                 </Field>
 
                                 <Field label="Property Number">
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="text"
                                         value={formData.property_no}
                                         onChange={(e) =>
@@ -270,7 +270,7 @@ export default function PropertyPage() {
                                 </Field>
 
                                 <Field label="Area (sq ft)">
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="number"
                                         value={formData.area_sq_ft}
                                         onChange={(e) =>
@@ -281,7 +281,7 @@ export default function PropertyPage() {
                                 </Field>
 
                                 <Field label="Construction Year">
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="number"
                                         value={formData.construction_year}
                                         onChange={(e) =>
@@ -310,7 +310,7 @@ export default function PropertyPage() {
                                 {/* ADDRESS ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ FULL WIDTH */}
                                 <div className="md:col-span-2">
                                     <Field label="Address">
-                                        <input
+                                        <input placeholder="Enter value" 
                                             type="text"
                                             value={formData.address}
                                             onChange={(e) =>

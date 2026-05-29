@@ -60,7 +60,7 @@
 //           </p>
 
 //           <form onSubmit={handleVerify} className="space-y-4">
-//             <input
+//             <input placeholder="Enter value" 
 //               type="text"
 //               value={otp}
 //               onChange={(e) => setOtp(e.target.value)}
@@ -197,7 +197,7 @@ export default function VerifyOtpPage() {
 
                     {/* Form */}
                     <form onSubmit={handleVerify} className="space-y-6">
-                        <input
+                        <input placeholder="Enter value" 
                             type="text"
                             value={otp}
                             onChange={(e) => setOtp(e.target.value)}

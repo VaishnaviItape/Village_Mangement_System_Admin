@@ -101,6 +101,9 @@ import SchemeApplicationsPage from "./pages/SchemeApplicationsPage.jsx";
 import Schemes from "./pages/Schemes.jsx";
 import TaxPage from "./pages/TaxPage.jsx";
 import ChatBot from "./pages/ChatBot.jsx";
+import TalukaPage from "./pages/TalukaPage.jsx";
+import PanchayatMembersPage from "./pages/PanchayatMembersPage.jsx";
+import InfrastructurePage from "./pages/InfrastructurePage.jsx";
 export default function App() {
   const [sideBarCollapsed, setSideBarCollapsed] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("authToken"));
@@ -212,6 +215,36 @@ export default function App() {
             <ProtectedRoute>
               <Layout>
                 <DistrictTable />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/taluka"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <TalukaPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/panchayat-members"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <PanchayatMembersPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/infrastructure"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <InfrastructurePage />
               </Layout>
             </ProtectedRoute>
           }

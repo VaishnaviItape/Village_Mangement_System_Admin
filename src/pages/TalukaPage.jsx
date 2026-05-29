@@ -1,63 +1,63 @@
 import React, { useEffect, useState } from "react";
 import SmartDataTable from "../components/tables/SmartDataTable";
 import {
-    getDistricts,
-    addDistrict,
-    updateDistrict,
-    deleteDistrict,
-} from "../services/districtService";
-import { getState } from "../services/stateService";
+    getTalukas,
+    createTaluka,
+    updateTaluka,
+    deleteTaluka,
+} from "../services/talukaService";
+import { getDistricts } from "../services/districtService";
 import toast, { Toaster } from "react-hot-toast";
 
-export default function DistrictPage() {
+export default function TalukaPage() {
+    const [talukas, setTalukas] = useState([]);
     const [districts, setDistricts] = useState([]);
-    const [states, setStates] = useState([]);
     const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingDistrict, setEditingDistrict] = useState(null);
+    const [editingTaluka, setEditingTaluka] = useState(null);
 
     const [formData, setFormData] = useState({
-        district_code: "",
-        district_name: "",
-        state_id: "",
+        taluka_code: "",
+        taluka_name: "",
+        district_id: "",
         is_active: 1,
     });
 
-    // Fetch Districts
-    const fetchDistricts = async () => {
+    // Fetch Talukas
+    const fetchTalukas = async () => {
         setLoading(true);
         try {
-            const res = await getDistricts();
-            setDistricts(res.data.data);
+            const res = await getTalukas();
+            setTalukas(res.data.data);
         } catch {
-            toast.error("Failed to fetch district records");
+            toast.error("Failed to fetch taluka records");
         } finally {
             setLoading(false);
         }
     };
 
-    // Fetch States for dropdown
-    const fetchStates = async () => {
+    // Fetch Districts for dropdown
+    const fetchDistricts = async () => {
         try {
-            const res = await getState();
-            setStates(res.data.data);
+            const res = await getDistricts();
+            setDistricts(res.data.data);
         } catch {
-            toast.error("Failed to load states");
+            toast.error("Failed to load districts");
         }
     };
 
     useEffect(() => {
+        fetchTalukas();
         fetchDistricts();
-        fetchStates();
     }, []);
 
     // Open Add Modal
     const handleAdd = () => {
-        setEditingDistrict(null);
+        setEditingTaluka(null);
         setFormData({
-            district_code: "",
-            district_name: "",
-            state_id: "",
+            taluka_code: "",
+            taluka_name: "",
+            district_id: "",
             is_active: 1,
         });
         setIsModalOpen(true);
@@ -65,11 +65,11 @@ export default function DistrictPage() {
 
     // Edit
     const handleEdit = (item) => {
-        setEditingDistrict(item);
+        setEditingTaluka(item);
         setFormData({
-            district_code: item.district_code,
-            district_name: item.district_name,
-            state_id: item.state_id,
+            taluka_code: item.taluka_code,
+            taluka_name: item.taluka_name,
+            district_id: item.district_id,
             is_active: item.is_active,
         });
         setIsModalOpen(true);
@@ -77,44 +77,44 @@ export default function DistrictPage() {
 
     // Delete
     const handleDelete = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this district?")) return;
+        if (!window.confirm("Are you sure you want to delete this taluka?")) return;
 
         try {
-            await deleteDistrict(id);
-            toast.success("District deleted successfully!");
-            fetchDistricts();
+            await deleteTaluka(id);
+            toast.success("Taluka deleted successfully!");
+            fetchTalukas();
         } catch {
-            toast.error("Failed to delete district");
+            toast.error("Failed to delete taluka");
         }
     };
 
     // Save or Update
     const handleSave = async () => {
-        if (!formData.district_code || !formData.district_name || !formData.state_id) {
+        if (!formData.taluka_code || !formData.taluka_name || !formData.district_id) {
             toast.error("All fields are required!");
             return;
         }
 
         try {
-            if (editingDistrict) {
-                await updateDistrict(editingDistrict.id, formData);
-                toast.success("District updated successfully!");
+            if (editingTaluka) {
+                await updateTaluka(editingTaluka.id, formData);
+                toast.success("Taluka updated successfully!");
             } else {
-                await addDistrict(formData);
-                toast.success("District added successfully!");
+                await createTaluka(formData);
+                toast.success("Taluka added successfully!");
             }
             setIsModalOpen(false);
-            fetchDistricts();
+            fetchTalukas();
         } catch {
-            toast.error("Failed to save district");
+            toast.error("Failed to save taluka");
         }
     };
 
     const columns = [
         { header: "ID", accessor: "id" },
-        { header: "District Code", accessor: "district_code" },
-        { header: "District Name", accessor: "district_name" },
-        { header: "State", accessor: "state_name" },
+        { header: "Taluka Code", accessor: "taluka_code" },
+        { header: "Taluka Name", accessor: "taluka_name" },
+        { header: "District", accessor: "district_name" },
         { header: "Active", accessor: "is_active" },
     ];
 
@@ -123,9 +123,9 @@ export default function DistrictPage() {
             <Toaster position="top-center" />
 
             <SmartDataTable
-                title="District Management"
+                title="Taluka Management"
                 columns={columns}
-                data={districts}
+                data={talukas}
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
@@ -143,19 +143,19 @@ export default function DistrictPage() {
                 <div className="fixed inset-0 flex items-center justify-center z-50">
                     <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 w-[450px] p-6">
                         <h2 className="text-lg font-bold mb-4">
-                            {editingDistrict ? "Edit District" : "Add District"}
+                            {editingTaluka ? "Edit Taluka" : "Add Taluka"}
                         </h2>
 
                         <div className="space-y-4">
                             <div>
                                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    District Code
+                                    Taluka Code
                                 </label>
                                 <input placeholder="Enter value" 
                                     type="text"
-                                    value={formData.district_code}
+                                    value={formData.taluka_code}
                                     onChange={(e) =>
-                                        setFormData({ ...formData, district_code: e.target.value })
+                                        setFormData({ ...formData, taluka_code: e.target.value })
                                     }
                                     className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
                                 />
@@ -163,34 +163,34 @@ export default function DistrictPage() {
 
                             <div>
                                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    District Name
+                                    Taluka Name
                                 </label>
                                 <input placeholder="Enter value" 
                                     type="text"
-                                    value={formData.district_name}
+                                    value={formData.taluka_name}
                                     onChange={(e) =>
-                                        setFormData({ ...formData, district_name: e.target.value })
+                                        setFormData({ ...formData, taluka_name: e.target.value })
                                     }
                                     className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
                                 />
                             </div>
 
-                            {/* State Dropdown */}
+                            {/* District Dropdown */}
                             <div>
                                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    Select State
+                                    Select District
                                 </label>
                                 <select
-                                    value={formData.state_id}
+                                    value={formData.district_id}
                                     onChange={(e) =>
-                                        setFormData({ ...formData, state_id: Number(e.target.value) })
+                                        setFormData({ ...formData, district_id: Number(e.target.value) })
                                     }
                                     className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
                                 >
-                                    <option value="">-- Select State --</option>
-                                    {states.map((state) => (
-                                        <option key={state.id} value={state.id}>
-                                            {state.state_name}
+                                    <option value="">-- Select District --</option>
+                                    {districts.map((district) => (
+                                        <option key={district.id} value={district.id}>
+                                            {district.district_name}
                                         </option>
                                     ))}
                                 </select>
@@ -225,7 +225,7 @@ export default function DistrictPage() {
                                 onClick={handleSave}
                                 className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
                             >
-                                {editingDistrict ? "Update" : "Add"}
+                                {editingTaluka ? "Update" : "Add"}
                             </button>
                         </div>
                     </div>

@@ -153,14 +153,14 @@ export default function Schemes() {
                             />
 
                             <div className="grid grid-cols-2 gap-3">
-                                <input
+                                <input placeholder="Enter value" 
                                     type="date"
                                     value={formData.start_date}
                                     onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
                                     className="border rounded-lg px-3 py-2"
                                 />
 
-                                <input
+                                <input placeholder="Enter value" 
                                     type="date"
                                     value={formData.end_date}
                                     onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}

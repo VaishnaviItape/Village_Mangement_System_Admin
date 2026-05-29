@@ -9,28 +9,8 @@ import {
 } from "lucide-react";
 // import { getDashboardData } from "../../services/dashboardService"; // Uncomment when connecting
 
-function StatsGrid() {
-  // Default state matching your API structure for safety
-  const [data, setData] = useState({
-    citizens: 0,
-    villages: 0,
-    complaints: 0,
-    totalGharPattiAmount: "0",
-    totalPaniPattiAmount: "0",
-  });
-
-  useEffect(() => {
-    // Mocking the API call with the data you provided
-    // In real app: const res = await getDashboardData(); setData(res.data);
-    const mockApiData = {
-      citizens: 1250, // Updated for visual effect
-      complaints: 5,  // Updated for visual effect
-      villages: 19,
-      totalGharPattiAmount: "9250.00",
-      totalPaniPattiAmount: "1600.00",
-    };
-    setData(mockApiData);
-  }, []);
+function StatsGrid({ data }) {
+  if (!data) return null;
 
   // Calculate Total Tax correctly (Fixing the API concatenation string issue)
   const gharPatti = parseFloat(data.totalGharPattiAmount) || 0;

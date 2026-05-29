@@ -64,7 +64,7 @@ export default function ChatBot() {
                 ))}
             </div>
             <div style={styles.inputArea}>
-                <input
+                <input placeholder="Enter value" 
                     style={styles.input}
                     value={input}
                     onChange={(e) => setInput(e.target.value)}

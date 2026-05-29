@@ -3,6 +3,7 @@ import SmartDataTable from "../components/tables/SmartDataTable";
 import { getUsers, addUser, updateUser, deleteUser } from "../services/userService";
 import toast, { Toaster } from "react-hot-toast";
 import { Eye, EyeOff, Upload } from "lucide-react"; // <-- install: npm install lucide-react
+import { API_BASE_URL } from "../config/apiConfig";
 
 export default function Users() {
     const [users, setUsers] = useState([]);
@@ -69,7 +70,14 @@ export default function Users() {
             ...user,
             profile_image: null  // Reset so only new upload is sent
         });
-        setPreviewImage(user.profile_image);
+        
+        let imageUrl = user.profile_image;
+        if (imageUrl && !imageUrl.startsWith("http") && !imageUrl.startsWith("blob:")) {
+            const baseUrl = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
+            imageUrl = `${baseUrl}${imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`}`;
+        }
+        
+        setPreviewImage(imageUrl);
         setIsModalOpen(true);
     };
 
@@ -113,7 +121,19 @@ export default function Users() {
 
     const columns = [
         { header: "ID", accessor: "id" },
-        { header: "Profile", accessor: "profile_image", cell: img => img ? <img src={img} className="w-10 h-10 rounded-full" /> : "No Image" },
+        { header: "Profile", accessor: "profile_image", cell: row => {
+            const img = row.profile_image;
+            const baseUrl = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
+            return img ? (
+                <img 
+                    src={img.startsWith("http") ? img : `${baseUrl}${img.startsWith('/') ? img : `/${img}`}`}
+                    alt={`${row.full_name}'s profile`} 
+                    style={{ width: "50px", height: "50px", borderRadius: "50%", objectFit: "cover" }} 
+                />
+            ) : (
+                <span>No Image</span>
+            );
+        } },
         { header: "Full Name", accessor: "full_name" },
         { header: "Username", accessor: "username" },
         { header: "Email", accessor: "email" },
@@ -177,7 +197,7 @@ export default function Users() {
                                         <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                                             {field.replace("_", " ").toUpperCase()}
                                         </label>
-                                        <input
+                                        <input placeholder="Enter value" 
                                             type="text"
                                             value={formData[field]}
                                             onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
@@ -191,7 +211,7 @@ export default function Users() {
                             {/* <div>
                                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">PASSWORD</label>
                                 <div className="relative">
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type={showPassword ? "text" : "password"}
                                         value={formData.password}
                                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}

@@ -266,7 +266,7 @@ export default function MessagesPage() {
           </button>
         </div>
 
-        <input
+        <input placeholder="Enter value" 
           type="text"
           value={searchTerm}
           onChange={(e) => filterConversations(e.target.value)}
@@ -387,7 +387,7 @@ export default function MessagesPage() {
                   <option value="mcq">MCQ</option>
                   <option value="detailed">Detailed</option>
                 </select>
-                <input
+                <input placeholder="Enter value" 
                   type="text"
                   value={composer.text}
                   onChange={(e) => setComposer({ ...composer, text: e.target.value })}

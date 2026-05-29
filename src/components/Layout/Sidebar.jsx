@@ -77,6 +77,9 @@ const menuItems = [
     submenu: [
       { id: "state", label: "State Master", icon: Zap },
       { id: "district", label: "District Master", icon: Zap },
+      { id: "taluka", label: "Taluka Master", icon: Zap },
+      { id: "panchayat-members", label: "Panchayat Members", icon: Zap },
+      { id: "infrastructure", label: "Infrastructure", icon: Zap },
     ],
   },
 

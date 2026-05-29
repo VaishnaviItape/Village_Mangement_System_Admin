@@ -18,6 +18,8 @@ export default function SimpleProfessionalTable({
   showActions = true,
 }) {
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   // Search Filter
   const filteredData = useMemo(() => {
@@ -29,6 +31,18 @@ export default function SimpleProfessionalTable({
       )
     );
   }, [search, data]);
+
+  // Reset page when search changes
+  useMemo(() => {
+    setCurrentPage(1);
+  }, [search]);
+
+  // Pagination Logic
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * rowsPerPage;
+    return filteredData.slice(start, start + rowsPerPage);
+  }, [filteredData, currentPage, rowsPerPage]);
 
   return (
     <div className="w-full bg-transparent">
@@ -133,14 +147,14 @@ export default function SimpleProfessionalTable({
 
             {/* Table Body */}
             <tbody>
-              {filteredData.length > 0 ? (
-                filteredData.map((row, index) => (
+              {paginatedData.length > 0 ? (
+                paginatedData.map((row, index) => (
                   <tr
                     key={row.id || index}
                     className="bg-white shadow-sm hover:shadow-md transition-all group"
                   >
                     <td className="px-6 py-4 text-sm text-slate-600 rounded-l-2xl border-l-4 border-transparent group-hover:border-emerald-500">
-                      {index + 1}
+                      {(currentPage - 1) * rowsPerPage + index + 1}
                     </td>
 
                     {columns.map((col, i) => (
@@ -193,6 +207,56 @@ export default function SimpleProfessionalTable({
             </tbody>
           </table>
         </div>
+
+        {/* Pagination Controls */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4 px-4 py-4 border-t border-slate-100 bg-white rounded-b-2xl shadow-sm">
+          <div className="text-sm text-slate-500">
+            Showing <span className="font-semibold text-slate-700">{filteredData.length === 0 ? 0 : (currentPage - 1) * rowsPerPage + 1}</span> to <span className="font-semibold text-slate-700">{Math.min(currentPage * rowsPerPage, filteredData.length)}</span> of <span className="font-semibold text-slate-700">{filteredData.length}</span> entries
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-slate-500">Rows:</span>
+              <select
+                value={rowsPerPage}
+                onChange={(e) => {
+                  setRowsPerPage(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
+                className="border border-slate-300 rounded-lg px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500 bg-white text-slate-700"
+              >
+                {[5, 10, 25, 50].map((size) => (
+                  <option key={size} value={size}>
+                    {size}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex items-center gap-1 border border-slate-200 rounded-lg p-1 bg-slate-50">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1.5 rounded-md text-sm font-medium text-slate-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-white hover:shadow-sm transition"
+              >
+                Prev
+              </button>
+              
+              <span className="px-3 py-1.5 text-sm font-medium text-slate-700 bg-white rounded-md shadow-sm">
+                {currentPage} / {Math.max(1, totalPages)}
+              </span>
+
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages || totalPages === 0}
+                className="px-3 py-1.5 rounded-md text-sm font-medium text-slate-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-white hover:shadow-sm transition"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );

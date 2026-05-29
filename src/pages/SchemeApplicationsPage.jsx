@@ -210,7 +210,7 @@ export default function SchemeApplicationsPage() {
 
                             <div>
                                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">Eligibility Score</label>
-                                <input
+                                <input placeholder="Enter value" 
                                     type="number"
                                     value={formData.eligibility_score}
                                     onChange={(e) => setFormData({ ...formData, eligibility_score: e.target.value })}
@@ -221,7 +221,7 @@ export default function SchemeApplicationsPage() {
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
                                     <label className="block text-sm font-semibold text-slate-700 mb-1.5">Submitted At</label>
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="date"
                                         value={formData.submitted_at}
                                         onChange={(e) => setFormData({ ...formData, submitted_at: e.target.value })}
@@ -230,7 +230,7 @@ export default function SchemeApplicationsPage() {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-semibold text-slate-700 mb-1.5">Approved At</label>
-                                    <input
+                                    <input placeholder="Enter value" 
                                         type="date"
                                         value={formData.approved_at}
                                         onChange={(e) => setFormData({ ...formData, approved_at: e.target.value })}
