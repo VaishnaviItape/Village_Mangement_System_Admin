@@ -265,9 +265,9 @@ export default function Header({ onToggleSidebar }) {
               <img
                 src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
                   user.fullName || "User"
-                )}&background=059669&color=fff`}
+                )}&background=4f46e5&color=fff`}
 
-                className="w-8 h-8 rounded-full ring-2 ring-emerald-400"
+                className="w-8 h-8 rounded-full ring-2 ring-indigo-400"
               />
               <div className="hidden md:flex flex-col text-left">
                 <span className="text-sm font-semibold text-slate-700">
@@ -283,22 +283,22 @@ export default function Header({ onToggleSidebar }) {
 
             {open && (
               <div
-                className="absolute right-0 mt-2 w-52 bg-gradient-to-br from-emerald-50 to-stone-100 shadow-lg rounded-2xl border border-emerald-200 transform transition-all duration-200 z-50 animate-fadeIn"
+                className="absolute right-0 mt-2 w-52 bg-gradient-to-br from-indigo-50 to-slate-100 shadow-lg rounded-2xl border border-indigo-200 transform transition-all duration-200 z-50 animate-fadeIn"
               >
                 <div className="py-2">
                   <button
                     onClick={() => navigate("/profile")}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-emerald-100 rounded-md transition-all hover:translate-x-1"
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-indigo-100 rounded-md transition-all hover:translate-x-1"
                   >
-                    <User className="w-4 h-4 text-emerald-600" />
+                    <User className="w-4 h-4 text-indigo-600" />
                     Profile
                   </button>
 
                   <button
                     onClick={() => navigate("/settings")}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-emerald-100 rounded-md transition-all hover:translate-x-1"
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-indigo-100 rounded-md transition-all hover:translate-x-1"
                   >
-                    <Settings className="w-4 h-4 text-emerald-600 rotate-hover" />
+                    <Settings className="w-4 h-4 text-indigo-600 rotate-hover" />
                     Settings
                   </button>
 

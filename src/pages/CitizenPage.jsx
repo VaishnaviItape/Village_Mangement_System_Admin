@@ -9,16 +9,8 @@ import {
 import { getVillages } from "../services/villageService";
 import toast, { Toaster } from "react-hot-toast";
 
-/**
- * Very small reusable Field component so we don't get "Field is not defined".
- * Keeps label + input markup consistent.
- */
-const Field = ({ label, children, className = "" }) => (
-    <div className={className}>
-        <label className="block text-sm font-semibold text-slate-700 mb-1.5">{label}</label>
-        {children}
-    </div>
-);
+import SmartModal from "../components/ui/SmartModal";
+import SmartFormField from "../components/ui/SmartFormField";
 
 export default function CitizenPage() {
     const [citizens, setCitizens] = useState([]);
@@ -183,181 +175,95 @@ export default function CitizenPage() {
             )}
 
             {/* Modal */}
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl shadow-2xl w-full border border-slate-100 max-w-2xl max-h-[90vh] overflow-hidden">
-                        {/* HEADER */}
-                        <div className="flex justify-between items-center border-b border-slate-200 px-6 py-4 bg-slate-50 rounded-t-2xl">
-                            <h2 className="text-xl font-semibold">
-                                {editingCitizen ? "Edit Citizen" : "Add Citizen"}
-                            </h2>
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="text-gray-600 hover:text-black text-2xl"
-                                aria-label="Close"
-                            >
-                                &times;
-                            </button>
-                        </div>
+            <SmartModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingCitizen ? "Edit Citizen" : "Add Citizen"} onSave={handleSave}>
+                <SmartFormField
+                    label="Full Name"
+                    value={formData.full_name}
+                    onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+                    required
+                />
 
-                        {/* SCROLLABLE FORM */}
-                        <div className="p-6 overflow-y-auto max-h-[70vh]">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {/* FULL NAME */}
-                                <Field label="Full Name">
-                                    <input placeholder="Enter value" 
-                                        type="text"
-                                        value={formData.full_name}
-                                        onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                                        className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                    />
-                                </Field>
+                <SmartFormField
+                    label="Father Name"
+                    value={formData.father_name}
+                    onChange={(e) => setFormData({ ...formData, father_name: e.target.value })}
+                />
 
-                                {/* FATHER NAME */}
-                                <Field label="Father Name">
-                                    <input placeholder="Enter value" 
-                                        type="text"
-                                        value={formData.father_name}
-                                        onChange={(e) => setFormData({ ...formData, father_name: e.target.value })}
-                                        className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                    />
-                                </Field>
+                <SmartFormField
+                    label="Email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                />
 
-                                {/* EMAIL */}
-                                <Field label="Email">
-                                    <input placeholder="Enter value" 
-                                        type="email"
-                                        value={formData.email}
-                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                        className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                    />
-                                </Field>
+                <SmartFormField
+                    label="Mobile"
+                    type="tel"
+                    value={formData.mobile}
+                    onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
+                />
 
-                                {/* MOBILE */}
-                                <Field label="Mobile">
-                                    <input placeholder="Enter value" 
-                                        type="tel"
-                                        value={formData.mobile}
-                                        onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
-                                        className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                    />
-                                </Field>
+                <SmartFormField
+                    label="Password"
+                    type="password"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                />
 
-                                {/* PASSWORD */}
-                                <Field label="Password">
-                                    <input placeholder="Enter value" 
-                                        type="password"
-                                        value={formData.password}
-                                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                        className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                    />
-                                </Field>
+                <SmartFormField
+                    label="Role"
+                    type="select"
+                    options={[{value: '', label: 'Select Role'}, 'SuperAdmin', 'Admin']}
+                    value={formData.role}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                />
 
-                                {/* ROLE DROPDOWN */}
-                                <Field label="Role">
-                                    <select
-                                        value={formData.role}
-                                        onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                                        className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                    >
-                                        <option value="">Select Role</option>
-                                        <option value="SuperAdmin">SuperAdmin</option>
-                                        <option value="Admin">Admin</option>
-                                    </select>
-                                </Field>
+                <SmartFormField
+                    label="Gender"
+                    type="select"
+                    options={[{value: '', label: 'Select Gender'}, 'Male', 'Female', 'Other']}
+                    value={formData.gender}
+                    onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                />
 
-                                {/* GENDER DROPDOWN */}
-                                <Field label="Gender">
-                                    <select
-                                        value={formData.gender}
-                                        onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                                        className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                    >
-                                        <option value="">Select Gender</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                </Field>
+                <SmartFormField
+                    label="Date of Birth"
+                    type="date"
+                    value={formData.dob}
+                    onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+                />
 
-                                {/* DOB */}
-                                <Field label="Date of Birth">
-                                    <input placeholder="Enter value" 
-                                        type="date"
-                                        value={formData.dob}
-                                        onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
-                                        className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                    />
-                                </Field>
+                <SmartFormField
+                    label="Aadhaar No"
+                    value={formData.aadhaar_no}
+                    onChange={(e) => setFormData({ ...formData, aadhaar_no: e.target.value })}
+                    required
+                />
 
-                                {/* AADHAAR */}
-                                <Field label="Aadhaar No">
-                                    <input placeholder="Enter value" 
-                                        type="text"
-                                        value={formData.aadhaar_no}
-                                        onChange={(e) => setFormData({ ...formData, aadhaar_no: e.target.value })}
-                                        className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                    />
-                                </Field>
-
-                                {/* ADDRESS (full width) */}
-                                <div className="md:col-span-2">
-                                    <Field label="Address">
-                                        <input placeholder="Enter value" 
-                                            type="text"
-                                            value={formData.address}
-                                            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                                            className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                        />
-                                    </Field>
-                                </div>
-
-                                {/* VILLAGE DROPDOWN (full width) */}
-                                <div className="md:col-span-2">
-                                    <Field label="Village">
-                                        <select
-                                            value={formData.VillageID}
-                                            onChange={(e) => setFormData({ ...formData, VillageID: e.target.value })}
-                                            className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                        >
-                                            <option value="">Select Village</option>
-                                            {villages && villages.length > 0 ? (
-                                                villages.map((v) => (
-                                                    <option key={v.VillageID} value={v.VillageID}>
-                                                        {/* Ensure village name display isn't cut off */}
-                                                        {v.VillageName}
-                                                    </option>
-                                                ))
-                                            ) : (
-                                                <option value="" disabled>
-                                                    Loading villages...
-                                                </option>
-                                            )}
-                                        </select>
-                                    </Field>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* FOOTER */}
-                        <div className="flex justify-end gap-3 px-6 py-4 border-t bg-gray-50">
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="bg-stone-500 hover:bg-stone-600 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
-                            >
-                                Cancel
-                            </button>
-
-                            <button
-                                onClick={handleSave}
-                                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
-                            >
-                                {editingCitizen ? "Update" : "Add"}
-                            </button>
-                        </div>
-                    </div>
+                <div className="md:col-span-2">
+                    <SmartFormField
+                        label="Address"
+                        value={formData.address}
+                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                        fullWidth
+                    />
                 </div>
-            )}
+
+                <div className="md:col-span-2">
+                    <SmartFormField
+                        label="Village"
+                        type="select"
+                        options={[
+                            { value: "", label: "Select Village" },
+                            ...villages.map(v => ({ value: v.VillageID, label: v.VillageName }))
+                        ]}
+                        value={formData.VillageID}
+                        onChange={(e) => setFormData({ ...formData, VillageID: e.target.value })}
+                        required
+                        fullWidth
+                    />
+                </div>
+            </SmartModal>
         </div>
     );
 }

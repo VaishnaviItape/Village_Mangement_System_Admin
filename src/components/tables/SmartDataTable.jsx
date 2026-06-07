@@ -85,7 +85,7 @@ export default function SimpleProfessionalTable({
             {showAddButton && (
               <button
                 onClick={onAdd}
-                className="px-4 py-2.5 bg-emerald-700 text-white rounded-xl flex items-center gap-2 hover:bg-emerald-800 shadow-sm transition"
+                className="px-4 py-2.5 bg-indigo-700 text-white rounded-xl flex items-center gap-2 hover:bg-indigo-800 shadow-sm transition"
               >
                 <Plus size={18} />
                 Add
@@ -153,7 +153,7 @@ export default function SimpleProfessionalTable({
                     key={row.id || index}
                     className="bg-white shadow-sm hover:shadow-md transition-all group"
                   >
-                    <td className="px-6 py-4 text-sm text-slate-600 rounded-l-2xl border-l-4 border-transparent group-hover:border-emerald-500">
+                    <td className="px-6 py-4 text-sm text-slate-600 rounded-l-2xl border-l-4 border-transparent group-hover:border-indigo-500">
                       {(currentPage - 1) * rowsPerPage + index + 1}
                     </td>
 
@@ -223,7 +223,7 @@ export default function SimpleProfessionalTable({
                   setRowsPerPage(Number(e.target.value));
                   setCurrentPage(1);
                 }}
-                className="border border-slate-300 rounded-lg px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500 bg-white text-slate-700"
+                className="border border-slate-300 rounded-lg px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-slate-700"
               >
                 {[5, 10, 25, 50].map((size) => (
                   <option key={size} value={size}>

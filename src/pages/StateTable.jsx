@@ -7,6 +7,8 @@ import {
     deleteState
 } from "../services/stateService";
 import toast, { Toaster } from "react-hot-toast";
+import SmartModal from "../components/ui/SmartModal";
+import SmartFormField from "../components/ui/SmartFormField";
 
 export default function StatePage() {
     const [states, setStates] = useState([]);
@@ -124,79 +126,38 @@ export default function StatePage() {
             )}
 
             {/* Modal */}
-            {isModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 w-[450px] p-6">
-                        <h2 className="text-lg font-bold mb-4">
-                            {editingState ? "Edit State" : "Add State"}
-                        </h2>
-
-                        <div className="space-y-4">
-                            {/* State Code */}
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    State Code
-                                </label>
-                                <input placeholder="Enter value" 
-                                    type="text"
-                                    value={formData.state_code}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, state_code: e.target.value })
-                                    }
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                />
-                            </div>
-
-                            {/* State Name */}
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    State Name
-                                </label>
-                                <input placeholder="Enter value" 
-                                    type="text"
-                                    value={formData.state_name}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, state_name: e.target.value })
-                                    }
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                />
-                            </div>
-
-                            {/* Active Toggle */}
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    Active Status
-                                </label>
-                                <select
-                                    value={formData.is_active}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, is_active: Number(e.target.value) })
-                                    }
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                >
-                                    <option value={1}>Active</option>
-                                    <option value={0}>Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="flex justify-end space-x-3 mt-6">
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="bg-stone-500 hover:bg-stone-600 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleSave}
-                                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
-                            >
-                                {editingState ? "Update" : "Add"}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <SmartModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title={editingState ? "Edit State" : "Add State"}
+                onSave={handleSave}
+            >
+                <SmartFormField 
+                    label="State Code" 
+                    value={formData.state_code} 
+                    onChange={(e) => setFormData({ ...formData, state_code: e.target.value })} 
+                    required 
+                />
+                
+                <SmartFormField 
+                    label="State Name" 
+                    value={formData.state_name} 
+                    onChange={(e) => setFormData({ ...formData, state_name: e.target.value })} 
+                    required 
+                />
+                
+                <SmartFormField 
+                    label="Active Status" 
+                    type="select"
+                    value={formData.is_active} 
+                    onChange={(e) => setFormData({ ...formData, is_active: Number(e.target.value) })} 
+                    options={[
+                        { label: 'Active', value: 1 },
+                        { label: 'Inactive', value: 0 }
+                    ]}
+                    fullWidth
+                />
+            </SmartModal>
         </div>
     );
 }

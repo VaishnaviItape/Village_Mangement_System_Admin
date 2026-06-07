@@ -11,15 +11,8 @@ import {
 } from "../services/propertyService";
 import { getVillages } from "../services/villageService";
 
-/* Reusable Field Component */
-const Field = ({ label, children, className = "" }) => (
-    <div className={className}>
-        <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-            {label}
-        </label>
-        {children}
-    </div>
-);
+import SmartModal from "../components/ui/SmartModal";
+import SmartFormField from "../components/ui/SmartFormField";
 
 export default function PropertyPage() {
     const [properties, setProperties] = useState([]);
@@ -208,160 +201,78 @@ export default function PropertyPage() {
             )}
 
             {/* MODAL */}
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl w-full max-w-2xl shadow-xl overflow-hidden">
+            <SmartModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingProperty ? "Edit Property" : "Add Property"} onSave={handleSave}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <SmartFormField
+                        label="Owner ID"
+                        value={formData.owner_id}
+                        onChange={(e) => setFormData({ ...formData, owner_id: e.target.value })}
+                        required
+                    />
 
-                        {/* HEADER */}
-                        <div className="flex justify-between items-center px-6 py-4 bg-gray-100 border-b">
-                            <h2 className="text-xl font-semibold">
-                                {editingProperty ? "Edit Property" : "Add Property"}
-                            </h2>
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="text-gray-600 hover:text-black text-2xl"
-                            >
-                                &times;
-                            </button>
-                        </div>
+                    <SmartFormField
+                        label="Property Number"
+                        value={formData.property_no}
+                        onChange={(e) => setFormData({ ...formData, property_no: e.target.value })}
+                        required
+                    />
 
-                        {/* FORM */}
-                        <div className="p-6 overflow-y-auto max-h-[70vh]">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <SmartFormField
+                        label="Property Type"
+                        type="select"
+                        options={["Residential", "Commercial", "Agriculture", "Industrial"]}
+                        value={formData.property_type}
+                        onChange={(e) => setFormData({ ...formData, property_type: e.target.value })}
+                    />
 
-                                <Field label="Owner ID">
-                                    <input placeholder="Enter value" 
-                                        type="text"
-                                        value={formData.owner_id}
-                                        onChange={(e) =>
-                                            setFormData({ ...formData, owner_id: e.target.value })
-                                        }
-                                        className="border rounded-lg px-3 py-2 w-full"
-                                    />
-                                </Field>
+                    <SmartFormField
+                        label="Area (sq ft)"
+                        type="number"
+                        value={formData.area_sq_ft}
+                        onChange={(e) => setFormData({ ...formData, area_sq_ft: e.target.value })}
+                        required
+                    />
 
-                                <Field label="Property Number">
-                                    <input placeholder="Enter value" 
-                                        type="text"
-                                        value={formData.property_no}
-                                        onChange={(e) =>
-                                            setFormData({ ...formData, property_no: e.target.value })
-                                        }
-                                        className="border rounded-lg px-3 py-2 w-full"
-                                    />
-                                </Field>
+                    <SmartFormField
+                        label="Construction Year"
+                        type="number"
+                        value={formData.construction_year}
+                        onChange={(e) => setFormData({ ...formData, construction_year: e.target.value })}
+                    />
 
-                                <Field label="Property Type">
-                                    <select
-                                        value={formData.property_type}
-                                        onChange={(e) =>
-                                            setFormData({ ...formData, property_type: e.target.value })
-                                        }
-                                        className="border rounded-lg px-3 py-2 w-full"
-                                    >
-                                        {["Residential", "Commercial", "Agriculture", "Industrial"].map(
-                                            (v) => (
-                                                <option key={v} value={v}>
-                                                    {v}
-                                                </option>
-                                            )
-                                        )}
-                                    </select>
-                                </Field>
+                    <SmartFormField
+                        label="Ownership Type"
+                        type="select"
+                        options={["Owner", "Tenant", "Lease"]}
+                        value={formData.ownership_type}
+                        onChange={(e) => setFormData({ ...formData, ownership_type: e.target.value })}
+                    />
 
-                                <Field label="Area (sq ft)">
-                                    <input placeholder="Enter value" 
-                                        type="number"
-                                        value={formData.area_sq_ft}
-                                        onChange={(e) =>
-                                            setFormData({ ...formData, area_sq_ft: e.target.value })
-                                        }
-                                        className="border rounded-lg px-3 py-2 w-full"
-                                    />
-                                </Field>
+                    <div className="md:col-span-2">
+                        <SmartFormField
+                            label="Address"
+                            value={formData.address}
+                            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                            fullWidth
+                        />
+                    </div>
 
-                                <Field label="Construction Year">
-                                    <input placeholder="Enter value" 
-                                        type="number"
-                                        value={formData.construction_year}
-                                        onChange={(e) =>
-                                            setFormData({ ...formData, construction_year: e.target.value })
-                                        }
-                                        className="border rounded-lg px-3 py-2 w-full"
-                                    />
-                                </Field>
-
-                                <Field label="Ownership Type">
-                                    <select
-                                        value={formData.ownership_type}
-                                        onChange={(e) =>
-                                            setFormData({ ...formData, ownership_type: e.target.value })
-                                        }
-                                        className="border rounded-lg px-3 py-2 w-full"
-                                    >
-                                        {["Owner", "Tenant", "Lease"].map((v) => (
-                                            <option key={v} value={v}>
-                                                {v}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </Field>
-
-                                {/* ADDRESS ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ FULL WIDTH */}
-                                <div className="md:col-span-2">
-                                    <Field label="Address">
-                                        <input placeholder="Enter value" 
-                                            type="text"
-                                            value={formData.address}
-                                            onChange={(e) =>
-                                                setFormData({ ...formData, address: e.target.value })
-                                            }
-                                            className="border rounded-lg px-3 py-2 w-full"
-                                        />
-                                    </Field>
-                                </div>
-
-                                {/* VILLAGE ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ FULL WIDTH */}
-                                <div className="md:col-span-2">
-                                    <Field label="Village">
-                                        <select
-                                            value={formData.village_id}
-                                            onChange={(e) =>
-                                                setFormData({ ...formData, village_id: e.target.value })
-                                            }
-                                            className="border rounded-lg px-3 py-2 w-full"
-                                        >
-                                            <option value="">Select Village</option>
-                                            {villages.map((v) => (
-                                                <option key={v.VillageID} value={v.VillageID}>
-                                                    {v.VillageName}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </Field>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* FOOTER */}
-                        <div className="flex justify-end gap-3 px-6 py-4 bg-gray-50 border-t">
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="bg-stone-500 hover:bg-stone-600 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
-                            >
-                                Cancel
-                            </button>
-
-                            <button
-                                onClick={handleSave}
-                                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
-                            >
-                                {editingProperty ? "Update" : "Add"}
-                            </button>
-                        </div>
+                    <div className="md:col-span-2">
+                        <SmartFormField
+                            label="Village"
+                            type="select"
+                            options={[
+                                { value: "", label: "Select Village" },
+                                ...villages.map(v => ({ value: v.VillageID, label: v.VillageName }))
+                            ]}
+                            value={formData.village_id}
+                            onChange={(e) => setFormData({ ...formData, village_id: e.target.value })}
+                            required
+                            fullWidth
+                        />
                     </div>
                 </div>
-            )}
+            </SmartModal>
         </div>
     );
 }

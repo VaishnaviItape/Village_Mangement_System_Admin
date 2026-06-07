@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import SmartDataTable from "../components/tables/SmartDataTable";
 import { getApplications } from "../services/applicationService";
 import toast, { Toaster } from "react-hot-toast";
+import SmartModal from "../components/ui/SmartModal";
+import SmartFormField from "../components/ui/SmartFormField";
 
 export default function ApplicationPage() {
     const [applications, setApplications] = useState([]);

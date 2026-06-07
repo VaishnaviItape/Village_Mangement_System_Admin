@@ -9,6 +9,8 @@ import {
 import { getCitizens } from "../services/citizenService";
 import { getSchemes } from "../services/schemeService";
 import toast, { Toaster } from "react-hot-toast";
+import SmartModal from "../components/ui/SmartModal";
+import SmartFormField from "../components/ui/SmartFormField";
 
 export default function SchemeApplicationsPage() {
     const [applications, setApplications] = useState([]);
@@ -159,98 +161,64 @@ export default function SchemeApplicationsPage() {
                 </div>
             )}
 
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-xl w-[500px] p-6 shadow-lg">
-                        <h2 className="text-lg font-bold mb-4">
-                            {editingApp ? "Edit Application" : "Add Application"}
-                        </h2>
+            {/* Modal */}
+            <SmartModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingApp ? "Edit Application" : "Add Application"} onSave={handleSave}>
+                <div className="space-y-4">
+                    <SmartFormField
+                        label="Select Citizen"
+                        type="select"
+                        options={[
+                            { value: "", label: "Select Citizen" },
+                            ...citizens.map(c => ({ value: c.id, label: c.full_name }))
+                        ]}
+                        value={formData.user_id}
+                        onChange={(e) => setFormData({ ...formData, user_id: parseInt(e.target.value) || e.target.value })}
+                        required
+                    />
 
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Select Citizen</label>
-                                <select
-                                    value={formData.user_id}
-                                    onChange={(e) => setFormData({ ...formData, user_id: parseInt(e.target.value) || e.target.value })}
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                >
-                                    <option value="">Select Citizen</option>
-                                    {citizens.map(c => (
-                                        <option key={c.id} value={c.id}>{c.full_name}</option>
-                                    ))}
-                                </select>
-                            </div>
+                    <SmartFormField
+                        label="Select Scheme"
+                        type="select"
+                        options={[
+                            { value: "", label: "Select Scheme" },
+                            ...schemes.map(s => ({ value: s.scheme_id, label: s.scheme_name }))
+                        ]}
+                        value={formData.scheme_id}
+                        onChange={(e) => setFormData({ ...formData, scheme_id: parseInt(e.target.value) || e.target.value })}
+                        required
+                    />
 
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Select Scheme</label>
-                                <select
-                                    value={formData.scheme_id}
-                                    onChange={(e) => setFormData({ ...formData, scheme_id: parseInt(e.target.value) || e.target.value })}
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                >
-                                    <option value="">Select Scheme</option>
-                                    {schemes.map(s => (
-                                        <option key={s.scheme_id} value={s.scheme_id}>{s.scheme_name}</option>
-                                    ))}
-                                </select>
-                            </div>
+                    <SmartFormField
+                        label="Status"
+                        type="select"
+                        options={["Pending", "Approved", "Rejected"]}
+                        value={formData.status}
+                        onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                    />
 
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Status</label>
-                                <select
-                                    value={formData.status}
-                                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                >
-                                    <option value="Pending">Pending</option>
-                                    <option value="Approved">Approved</option>
-                                    <option value="Rejected">Rejected</option>
-                                </select>
-                            </div>
+                    <SmartFormField
+                        label="Eligibility Score"
+                        type="number"
+                        value={formData.eligibility_score}
+                        onChange={(e) => setFormData({ ...formData, eligibility_score: e.target.value })}
+                    />
 
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Eligibility Score</label>
-                                <input placeholder="Enter value" 
-                                    type="number"
-                                    value={formData.eligibility_score}
-                                    onChange={(e) => setFormData({ ...formData, eligibility_score: e.target.value })}
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-1.5">Submitted At</label>
-                                    <input placeholder="Enter value" 
-                                        type="date"
-                                        value={formData.submitted_at}
-                                        onChange={(e) => setFormData({ ...formData, submitted_at: e.target.value })}
-                                        className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-1.5">Approved At</label>
-                                    <input placeholder="Enter value" 
-                                        type="date"
-                                        value={formData.approved_at}
-                                        onChange={(e) => setFormData({ ...formData, approved_at: e.target.value })}
-                                        className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex justify-end gap-3 mt-6">
-                            <button onClick={() => setIsModalOpen(false)} className="bg-stone-500 hover:bg-stone-600 text-white px-4 py-2 rounded-lg shadow-sm transition-colors">
-                                Cancel
-                            </button>
-                            <button onClick={handleSave} className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-sm transition-colors">
-                                {editingApp ? "Update" : "Add"}
-                            </button>
-                        </div>
+                    <div className="grid grid-cols-2 gap-3">
+                        <SmartFormField
+                            label="Submitted At"
+                            type="date"
+                            value={formData.submitted_at}
+                            onChange={(e) => setFormData({ ...formData, submitted_at: e.target.value })}
+                        />
+                        <SmartFormField
+                            label="Approved At"
+                            type="date"
+                            value={formData.approved_at}
+                            onChange={(e) => setFormData({ ...formData, approved_at: e.target.value })}
+                        />
                     </div>
                 </div>
-            )}
+            </SmartModal>
         </div>
     );
 }

@@ -7,6 +7,8 @@ import {
     deletePanchayatMember,
 } from "../services/panchayatMembersService";
 import toast, { Toaster } from "react-hot-toast";
+import SmartModal from "../components/ui/SmartModal";
+import SmartFormField from "../components/ui/SmartFormField";
 
 export default function PanchayatMembersPage() {
     const [members, setMembers] = useState([]);
@@ -125,96 +127,50 @@ export default function PanchayatMembersPage() {
                 </div>
             )}
 
-            {isModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 bg-slate-900/50 backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 w-[450px] p-6">
-                        <h2 className="text-lg font-bold mb-4">
-                            {editingMember ? "Edit Member" : "Add Member"}
-                        </h2>
+            <SmartModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title={editingMember ? "Edit Member" : "Add Member"}
+                onSave={handleSave}
+            >
+                <SmartFormField 
+                    label="Name" 
+                    value={formData.member_name} 
+                    onChange={(e) => setFormData({ ...formData, member_name: e.target.value })} 
+                    placeholder="Enter Name"
+                    required 
+                />
+                
+                <SmartFormField 
+                    label="Role (e.g. Sarpanch, Ward Member)" 
+                    value={formData.role} 
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value })} 
+                    placeholder="Enter Role"
+                    required 
+                />
 
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    Name
-                                </label>
-                                <input
-                                    placeholder="Enter Name"
-                                    type="text"
-                                    value={formData.member_name}
-                                    onChange={(e) => setFormData({ ...formData, member_name: e.target.value })}
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
-                                />
-                            </div>
+                <SmartFormField 
+                    label="Term Start Date" 
+                    type="date"
+                    value={formData.term_start_date} 
+                    onChange={(e) => setFormData({ ...formData, term_start_date: e.target.value })} 
+                />
 
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    Role (e.g. Sarpanch, Ward Member)
-                                </label>
-                                <input
-                                    placeholder="Enter Role"
-                                    type="text"
-                                    value={formData.role}
-                                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                        Term Start Date
-                                    </label>
-                                    <input
-                                        type="date"
-                                        value={formData.term_start_date}
-                                        onChange={(e) => setFormData({ ...formData, term_start_date: e.target.value })}
-                                        className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                        Term End Date
-                                    </label>
-                                    <input
-                                        type="date"
-                                        value={formData.term_end_date}
-                                        onChange={(e) => setFormData({ ...formData, term_end_date: e.target.value })}
-                                        className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
-                                    />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    Contact Info
-                                </label>
-                                <input
-                                    placeholder="Enter Contact Details"
-                                    type="text"
-                                    value={formData.contact_info}
-                                    onChange={(e) => setFormData({ ...formData, contact_info: e.target.value })}
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="flex justify-end space-x-3 mt-6">
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="bg-stone-500 hover:bg-stone-600 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleSave}
-                                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
-                            >
-                                {editingMember ? "Update" : "Add"}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+                <SmartFormField 
+                    label="Term End Date" 
+                    type="date"
+                    value={formData.term_end_date} 
+                    onChange={(e) => setFormData({ ...formData, term_end_date: e.target.value })} 
+                />
+                
+                <SmartFormField 
+                    label="Contact Info" 
+                    value={formData.contact_info} 
+                    onChange={(e) => setFormData({ ...formData, contact_info: e.target.value })} 
+                    placeholder="Enter Contact Details"
+                    fullWidth
+                />
+            </SmartModal>
         </div>
     );
 }

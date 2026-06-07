@@ -4,12 +4,18 @@ import {
     getVillages,
     addVillage,
     updateVillage,
-    deleteVillage
+    deleteVillage,
+    getStates,
+    getDistricts
 } from "../services/villageService";
 import toast, { Toaster } from "react-hot-toast";
+import SmartModal from "../components/ui/SmartModal";
+import SmartFormField from "../components/ui/SmartFormField";
 
 export default function VillagePage() {
     const [villages, setVillages] = useState([]);
+    const [states, setStates] = useState([]);
+    const [districts, setDistricts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingVillage, setEditingVillage] = useState(null);
@@ -26,7 +32,7 @@ export default function VillagePage() {
         setLoading(true);
         try {
             const res = await getVillages();
-            setVillages(res.data.data);
+            setVillages(res.data.data || []);
         } catch {
             toast.error("Failed to fetch village data");
         } finally {
@@ -34,8 +40,22 @@ export default function VillagePage() {
         }
     };
 
+    const fetchDropdownData = async () => {
+        try {
+            const [stateRes, distRes] = await Promise.all([
+                getStates(),
+                getDistricts()
+            ]);
+            setStates(stateRes.data.data || []);
+            setDistricts(distRes.data.data || []);
+        } catch {
+            console.error("Failed to fetch dropdown data");
+        }
+    };
+
     useEffect(() => {
         fetchVillages();
+        fetchDropdownData();
     }, []);
 
     // Add
@@ -54,10 +74,32 @@ export default function VillagePage() {
     // Edit
     const handleEdit = (village) => {
         setEditingVillage(village);
+
+        // Fallback for legacy data: map string names to IDs if explicit ID is missing
+        let mappedStateId = village.StateID || village.State;
+        if (!village.StateID && village.State) {
+            const matchedState = states.find(s => 
+                s.state_name === village.State || 
+                s.id?.toString() === village.State?.toString() ||
+                (typeof village.State === 'string' && s.state_name.toLowerCase().startsWith(village.State.substring(0, 4).toLowerCase()))
+            );
+            if (matchedState) mappedStateId = matchedState.id;
+        }
+
+        let mappedDistrictId = village.DistrictID || village.District;
+        if (!village.DistrictID && village.District) {
+            const matchedDistrict = districts.find(d => 
+                d.district_name === village.District || 
+                d.id?.toString() === village.District?.toString() ||
+                (typeof village.District === 'string' && d.district_name.toLowerCase().startsWith(village.District.substring(0, 4).toLowerCase()))
+            );
+            if (matchedDistrict) mappedDistrictId = matchedDistrict.id;
+        }
+
         setFormData({
             VillageName: village.VillageName,
-            District: village.District,
-            State: village.State,
+            District: mappedDistrictId || "",
+            State: mappedStateId || "",
             Population: village.Population,
             Area: village.Area
         });
@@ -103,8 +145,8 @@ export default function VillagePage() {
     const columns = [
         { header: "Village ID", accessor: "VillageID" },
         { header: "Village Name", accessor: "VillageName" },
-        { header: "District", accessor: "District" },
-        { header: "State", accessor: "State" },
+        { header: "District", cell: (row) => row.DistrictName || row.District },
+        { header: "State", cell: (row) => row.StateName || row.State },
         { header: "Population", accessor: "Population" },
         { header: "Area (sq/km)", accessor: "Area" },
     ];
@@ -126,55 +168,74 @@ export default function VillagePage() {
             {/* Loader */}
             {loading && (
                 <div className="fixed inset-0 flex items-center justify-center bg-white/50 z-50">
-                    <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
                 </div>
             )}
 
             {/* Modal */}
-            {isModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 w-[450px] p-6">
-                        <h2 className="text-lg font-bold mb-4">
-                            {editingVillage ? "Edit Village" : "Add Village"}
-                        </h2>
+            <SmartModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title={editingVillage ? "Edit Village" : "Add Village"}
+                onSave={handleSave}
+            >
+                <SmartFormField 
+                    label="Village Name" 
+                    type="text"
+                    value={formData.VillageName} 
+                    onChange={(e) => setFormData({ ...formData, VillageName: e.target.value })} 
+                    required 
+                />
 
-                        <div className="space-y-4">
-                            {["VillageName", "District", "State", "Population", "Area"].map(
-                                (field) => (
-                                    <div key={field}>
-                                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                            {field.replace(/([A-Z])/g, " $1")}
-                                        </label>
-                                        <input placeholder="Enter value" 
-                                            type={field === "Population" || field === "Area" ? "number" : "text"}
-                                            value={formData[field]}
-                                            onChange={(e) =>
-                                                setFormData({ ...formData, [field]: e.target.value })
-                                            }
-                                            className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                        />
-                                    </div>
-                                )
-                            )}
-                        </div>
-
-                        <div className="flex justify-end space-x-3 mt-6">
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="bg-stone-500 hover:bg-stone-600 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleSave}
-                                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
-                            >
-                                {editingVillage ? "Update" : "Add"}
-                            </button>
-                        </div>
-                    </div>
+                <div className="flex flex-col space-y-1.5">
+                    <label className="text-sm font-semibold text-slate-700">State *</label>
+                    <select
+                        value={formData.State}
+                        onChange={(e) => setFormData({ ...formData, State: e.target.value, District: "" })}
+                        required
+                        className="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-slate-700"
+                    >
+                        <option value="">Select State</option>
+                        {states.map((s) => (
+                            <option key={s.id} value={s.id}>{s.state_name}</option>
+                        ))}
+                    </select>
                 </div>
-            )}
+
+                <div className="flex flex-col space-y-1.5">
+                    <label className="text-sm font-semibold text-slate-700">District *</label>
+                    <select
+                        value={formData.District}
+                        onChange={(e) => setFormData({ ...formData, District: e.target.value })}
+                        required
+                        disabled={!formData.State}
+                        className="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-slate-700 disabled:bg-slate-50 disabled:text-slate-400"
+                    >
+                        <option value="">Select District</option>
+                        {districts
+                            .filter((d) => d.state_id.toString() === formData.State.toString())
+                            .map((d) => (
+                                <option key={d.id} value={d.id}>{d.district_name}</option>
+                            ))}
+                    </select>
+                </div>
+
+                <SmartFormField 
+                    label="Population" 
+                    type="number"
+                    value={formData.Population} 
+                    onChange={(e) => setFormData({ ...formData, Population: e.target.value })} 
+                    required 
+                />
+
+                <SmartFormField 
+                    label="Area" 
+                    type="number"
+                    value={formData.Area} 
+                    onChange={(e) => setFormData({ ...formData, Area: e.target.value })} 
+                    required 
+                />
+            </SmartModal>
         </div>
     );
 }

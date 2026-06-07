@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import SmartDataTable from "../components/tables/SmartDataTable";
 import { getSchemes, addScheme, updateScheme, deleteScheme } from "../services/schemeService";
 import toast, { Toaster } from "react-hot-toast";
+import SmartModal from "../components/ui/SmartModal";
+import SmartFormField from "../components/ui/SmartFormField";
 
 export default function Schemes() {
     const [schemes, setSchemes] = useState([]);
@@ -120,75 +122,56 @@ export default function Schemes() {
                 </div>
             )}
 
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-xl w-[500px] p-6 shadow-lg">
-                        <h2 className="text-lg font-bold mb-4">
-                            {editingScheme ? "Edit Scheme" : "Add Scheme"}
-                        </h2>
+            {/* Modal */}
+            <SmartModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingScheme ? "Edit Scheme" : "Add Scheme"} onSave={handleSave}>
+                <div className="space-y-4">
+                    <SmartFormField
+                        label="Scheme Name"
+                        value={formData.scheme_name}
+                        onChange={(e) => setFormData({ ...formData, scheme_name: e.target.value })}
+                        required
+                    />
 
-                        <div className="space-y-4">
-                            <input
-                                type="text"
-                                placeholder="Scheme Name"
-                                value={formData.scheme_name}
-                                onChange={(e) => setFormData({ ...formData, scheme_name: e.target.value })}
-                                className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                            />
+                    <SmartFormField
+                        label="Eligibility Criteria (JSON)"
+                        type="textarea"
+                        value={formData.eligibility_criteria}
+                        onChange={(e) => setFormData({ ...formData, eligibility_criteria: e.target.value })}
+                        fullWidth
+                    />
 
-                            <textarea
-                                rows={3}
-                                placeholder="Eligibility Criteria (JSON)"
-                                value={formData.eligibility_criteria}
-                                onChange={(e) => setFormData({ ...formData, eligibility_criteria: e.target.value })}
-                                className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm font-mono"
-                            />
+                    <SmartFormField
+                        label="Description"
+                        type="textarea"
+                        value={formData.description}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        fullWidth
+                    />
 
-                            <textarea
-                                rows={3}
-                                placeholder="Description"
-                                value={formData.description}
-                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                            />
-
-                            <div className="grid grid-cols-2 gap-3">
-                                <input placeholder="Enter value" 
-                                    type="date"
-                                    value={formData.start_date}
-                                    onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-                                    className="border rounded-lg px-3 py-2"
-                                />
-
-                                <input placeholder="Enter value" 
-                                    type="date"
-                                    value={formData.end_date}
-                                    onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-                                    className="border rounded-lg px-3 py-2"
-                                />
-                            </div>
-
-                            <select
-                                value={formData.status}
-                                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                            >
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                            </select>
-                        </div>
-
-                        <div className="flex justify-end gap-3 mt-6">
-                            <button onClick={() => setIsModalOpen(false)} className="bg-stone-500 hover:bg-stone-600 text-white px-4 py-2 rounded-lg shadow-sm transition-colors">
-                                Cancel
-                            </button>
-                            <button onClick={handleSave} className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-sm transition-colors">
-                                {editingScheme ? "Update" : "Add"}
-                            </button>
-                        </div>
+                    <div className="grid grid-cols-2 gap-3">
+                        <SmartFormField
+                            label="Start Date"
+                            type="date"
+                            value={formData.start_date}
+                            onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+                        />
+                        <SmartFormField
+                            label="End Date"
+                            type="date"
+                            value={formData.end_date}
+                            onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+                        />
                     </div>
+
+                    <SmartFormField
+                        label="Status"
+                        type="select"
+                        options={["Active", "Inactive"]}
+                        value={formData.status}
+                        onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                    />
                 </div>
-            )}
+            </SmartModal>
         </div>
     );
 }

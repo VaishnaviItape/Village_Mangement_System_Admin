@@ -8,6 +8,8 @@ import {
 } from "../services/districtService";
 import { getState } from "../services/stateService";
 import toast, { Toaster } from "react-hot-toast";
+import SmartModal from "../components/ui/SmartModal";
+import SmartFormField from "../components/ui/SmartFormField";
 
 export default function DistrictPage() {
     const [districts, setDistricts] = useState([]);
@@ -139,98 +141,46 @@ export default function DistrictPage() {
             )}
 
             {/* Modal */}
-            {isModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 w-[450px] p-6">
-                        <h2 className="text-lg font-bold mb-4">
-                            {editingDistrict ? "Edit District" : "Add District"}
-                        </h2>
+            <SmartModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title={editingDistrict ? "Edit District" : "Add District"}
+                onSave={handleSave}
+            >
+                <SmartFormField 
+                    label="District Code" 
+                    value={formData.district_code} 
+                    onChange={(e) => setFormData({ ...formData, district_code: e.target.value })} 
+                    required 
+                />
+                
+                <SmartFormField 
+                    label="District Name" 
+                    value={formData.district_name} 
+                    onChange={(e) => setFormData({ ...formData, district_name: e.target.value })} 
+                    required 
+                />
 
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    District Code
-                                </label>
-                                <input placeholder="Enter value" 
-                                    type="text"
-                                    value={formData.district_code}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, district_code: e.target.value })
-                                    }
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    District Name
-                                </label>
-                                <input placeholder="Enter value" 
-                                    type="text"
-                                    value={formData.district_name}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, district_name: e.target.value })
-                                    }
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                />
-                            </div>
-
-                            {/* State Dropdown */}
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    Select State
-                                </label>
-                                <select
-                                    value={formData.state_id}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, state_id: Number(e.target.value) })
-                                    }
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                >
-                                    <option value="">-- Select State --</option>
-                                    {states.map((state) => (
-                                        <option key={state.id} value={state.id}>
-                                            {state.state_name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            {/* Active Toggle */}
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    Active Status
-                                </label>
-                                <select
-                                    value={formData.is_active}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, is_active: Number(e.target.value) })
-                                    }
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
-                                >
-                                    <option value={1}>Active</option>
-                                    <option value={0}>Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="flex justify-end space-x-3 mt-6">
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="bg-stone-500 hover:bg-stone-600 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleSave}
-                                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
-                            >
-                                {editingDistrict ? "Update" : "Add"}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+                <SmartFormField 
+                    label="Select State" 
+                    type="select"
+                    value={formData.state_id} 
+                    onChange={(e) => setFormData({ ...formData, state_id: Number(e.target.value) })} 
+                    options={states.map(state => ({ label: state.state_name, value: state.id }))}
+                    required
+                />
+                
+                <SmartFormField 
+                    label="Active Status" 
+                    type="select"
+                    value={formData.is_active} 
+                    onChange={(e) => setFormData({ ...formData, is_active: Number(e.target.value) })} 
+                    options={[
+                        { label: 'Active', value: 1 },
+                        { label: 'Inactive', value: 0 }
+                    ]}
+                />
+            </SmartModal>
         </div>
     );
 }

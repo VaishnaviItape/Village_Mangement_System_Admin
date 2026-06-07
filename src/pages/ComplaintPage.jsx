@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import SmartDataTable from "../components/tables/SmartDataTable";
 import { getComplaints } from "../services/complaintService";
 import toast, { Toaster } from "react-hot-toast";
+import SmartModal from "../components/ui/SmartModal";
+import SmartFormField from "../components/ui/SmartFormField";
 
 export default function ComplaintPage() {
     const [complaints, setComplaints] = useState([]);

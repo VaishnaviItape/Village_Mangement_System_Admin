@@ -57,6 +57,11 @@
 //                         <Route path="subscription" element={<SubscriptionPlanTable />} />
 //                         <Route path="all-clients" element={<ClientsPage />} />
 //                         <Route path="*" element={<Dashboard />} />
+//                         {/* Expansion Modules */}
+//                         <Route path="/sv/health" element={<HealthSanitation />} />
+//                         <Route path="/sv/marketplace" element={<MarketplaceAdmin />} />
+//                         <Route path="/sv/payments" element={<PaymentsAdmin />} />
+//                         <Route path="/sv/audit" element={<AuditReports />} />
 //                       </Routes>
 //                     </div>
 //                   </main>
@@ -104,6 +109,23 @@ import ChatBot from "./pages/ChatBot.jsx";
 import TalukaPage from "./pages/TalukaPage.jsx";
 import PanchayatMembersPage from "./pages/PanchayatMembersPage.jsx";
 import InfrastructurePage from "./pages/InfrastructurePage.jsx";
+import TaxReportPage from "./pages/Reports/TaxReportPage.jsx";
+import ComplaintReportPage from "./pages/Reports/ComplaintReportPage.jsx";
+import UserReportPage from "./pages/Reports/UserReportPage.jsx";
+import CivicRegistrationsPage from "./pages/CivicRegistrationsPage.jsx";
+import UtilityRequestsPage from "./pages/UtilityRequestsPage.jsx";
+import TradeLicensesPage from "./pages/SmartVillage/TradeLicensesPage.jsx";
+import VendorManagementPage from "./pages/SmartVillage/VendorManagementPage.jsx";
+import GramSabhaPage from "./pages/SmartVillage/GramSabhaPage.jsx";
+import ExpensesPage from "./pages/SmartVillage/ExpensesPage.jsx";
+import AssetMaintenancePage from "./pages/SmartVillage/AssetMaintenancePage.jsx";
+import LandRegistrationsPage from "./pages/SmartVillage/LandRegistrationsPage.jsx";
+
+// Expansion Modules
+import HealthSanitation from "./pages/Expansion/HealthSanitation";
+import MarketplaceAdmin from "./pages/Expansion/MarketplaceAdmin";
+import PaymentsAdmin from "./pages/Expansion/PaymentsAdmin";
+import AuditReports from "./pages/Expansion/AuditReports";
 export default function App() {
   const [sideBarCollapsed, setSideBarCollapsed] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("authToken"));
@@ -113,11 +135,30 @@ export default function App() {
     setIsLoggedIn(!!token);
   }, []);
 
-  // ✅ Protected Route
+  // ✅ Protected Route with RBAC
   const ProtectedRoute = ({ children }) => {
-    if (!isLoggedIn) {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
       return <Navigate to="/login" replace />;
     }
+
+    try {
+      // Decode JWT payload to get user role
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      if (payload.role === "villager") {
+        // Villagers are not allowed in the Admin Panel
+        return (
+          <div className="flex flex-col items-center justify-center h-screen bg-red-50">
+            <h1 className="text-3xl font-bold text-red-600 mb-4">Access Denied</h1>
+            <p className="text-gray-700 mb-6">Villagers cannot access the Admin Panel. Please use the Mobile App.</p>
+            <button onClick={() => { localStorage.removeItem("authToken"); window.location.href='/login'; }} className="bg-red-600 text-white px-6 py-2 rounded">Logout</button>
+          </div>
+        );
+      }
+    } catch (e) {
+      console.error("Token decode error", e);
+    }
+
     return children;
   };
 
@@ -395,6 +436,69 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/reports/taxes"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <TaxReportPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reports/complaints"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ComplaintReportPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reports/users"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <UserReportPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/civic-registrations"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <CivicRegistrationsPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/utility-requests"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <UtilityRequestsPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/sv/trade" element={<ProtectedRoute><Layout><TradeLicensesPage /></Layout></ProtectedRoute>} />
+        <Route path="/sv/vendors" element={<ProtectedRoute><Layout><VendorManagementPage /></Layout></ProtectedRoute>} />
+        <Route path="/sv/sabha" element={<ProtectedRoute><Layout><GramSabhaPage /></Layout></ProtectedRoute>} />
+        <Route path="/sv/expenses" element={<ProtectedRoute><Layout><ExpensesPage /></Layout></ProtectedRoute>} />
+        <Route path="/sv/maintenance" element={<ProtectedRoute><Layout><AssetMaintenancePage /></Layout></ProtectedRoute>} />
+        <Route path="/sv/land" element={<ProtectedRoute><Layout><LandRegistrationsPage /></Layout></ProtectedRoute>} />
+
+        {/* Expansion Modules */}
+        <Route path="/sv/health" element={<ProtectedRoute><Layout><HealthSanitation /></Layout></ProtectedRoute>} />
+        <Route path="/sv/marketplace" element={<ProtectedRoute><Layout><MarketplaceAdmin /></Layout></ProtectedRoute>} />
+        <Route path="/sv/payments" element={<ProtectedRoute><Layout><PaymentsAdmin /></Layout></ProtectedRoute>} />
+        <Route path="/sv/audit" element={<ProtectedRoute><Layout><AuditReports /></Layout></ProtectedRoute>} />
+        
         {/* Default Redirect */}
         <Route
           path="*"

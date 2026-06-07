@@ -7,6 +7,8 @@ import {
     deleteInfrastructure,
 } from "../services/infrastructureService";
 import toast, { Toaster } from "react-hot-toast";
+import SmartModal from "../components/ui/SmartModal";
+import SmartFormField from "../components/ui/SmartFormField";
 
 export default function InfrastructurePage() {
     const [assets, setAssets] = useState([]);
@@ -121,85 +123,43 @@ export default function InfrastructurePage() {
             )}
 
             {isModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 bg-slate-900/50 backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 w-[450px] p-6">
-                        <h2 className="text-lg font-bold mb-4">
-                            {editingAsset ? "Edit Asset" : "Add Asset"}
-                        </h2>
+                <SmartModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    title={editingAsset ? "Edit Asset" : "Add Asset"}
+                    onSave={handleSave}
+                >
+                    <SmartFormField 
+                        label="Asset Name" 
+                        value={formData.name} 
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+                        placeholder="e.g. Submersible Water Pump"
+                        required 
+                    />
+                    
+                    <SmartFormField 
+                        label="Asset Type" 
+                        value={formData.type} 
+                        onChange={(e) => setFormData({ ...formData, type: e.target.value })} 
+                        placeholder="e.g. Water Supply, Road, Vehicle"
+                        required 
+                    />
 
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    Asset Name
-                                </label>
-                                <input
-                                    placeholder="e.g. Submersible Water Pump"
-                                    type="text"
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
-                                />
-                            </div>
+                    <SmartFormField 
+                        label="Status" 
+                        type="select"
+                        value={formData.status} 
+                        onChange={(e) => setFormData({ ...formData, status: e.target.value })} 
+                        options={['Good', 'Needs Repair', 'Broken', 'Under Maintenance']}
+                    />
 
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    Asset Type
-                                </label>
-                                <input
-                                    placeholder="e.g. Water Supply, Road, Vehicle"
-                                    type="text"
-                                    value={formData.type}
-                                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    Status
-                                </label>
-                                <select
-                                    value={formData.status}
-                                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
-                                >
-                                    <option value="Good">Good</option>
-                                    <option value="Needs Repair">Needs Repair</option>
-                                    <option value="Broken">Broken</option>
-                                    <option value="Under Maintenance">Under Maintenance</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                                    Maintained By
-                                </label>
-                                <input
-                                    placeholder="e.g. Gram Panchayat, Zilla Parishad"
-                                    type="text"
-                                    value={formData.maintained_by}
-                                    onChange={(e) => setFormData({ ...formData, maintained_by: e.target.value })}
-                                    className="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="flex justify-end space-x-3 mt-6">
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="bg-stone-500 hover:bg-stone-600 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleSave}
-                                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-sm transition-colors"
-                            >
-                                {editingAsset ? "Update" : "Add"}
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                    <SmartFormField 
+                        label="Maintained By" 
+                        value={formData.maintained_by} 
+                        onChange={(e) => setFormData({ ...formData, maintained_by: e.target.value })} 
+                        placeholder="e.g. Gram Panchayat, Zilla Parishad"
+                    />
+                </SmartModal>
             )}
         </div>
     );
