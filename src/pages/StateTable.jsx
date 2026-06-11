@@ -6,7 +6,7 @@ import {
     updateState,
     deleteState
 } from "../services/stateService";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
 import SmartModal from "../components/ui/SmartModal";
 import SmartFormField from "../components/ui/SmartFormField";
 
@@ -106,7 +106,7 @@ export default function StatePage() {
 
     return (
         <div className="p-8 space-y-6">
-            <Toaster position="top-center" />
+            
 
             <SmartDataTable
                 title="State Management"

@@ -24,9 +24,7 @@ export default function SmartModal({ isOpen, onClose, title, onSave, children, i
 
                 {/* SCROLLABLE FORM BODY */}
                 <div className="p-6 overflow-y-auto flex-1">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        {children}
-                    </div>
+                    {children}
                 </div>
 
                 {/* FOOTER ACTIONS */}

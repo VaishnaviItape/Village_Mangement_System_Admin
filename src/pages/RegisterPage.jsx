@@ -2,45 +2,49 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import iconLogin from "../assets/iconLogin.png"; // path adjust kare
+import iconLogin from "../assets/iconLogin.png"; // Adjust path if needed
 
-
-export default function LoginPage({ onLogin }) {
-    const [formData, setFormData] = useState({ username: "", password: "" });
+export default function RegisterPage() {
+    const [formData, setFormData] = useState({ 
+        full_name: "", 
+        username: "", 
+        email: "", 
+        password: "" 
+    });
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleLogin = async () => {
-        if (!formData.username || !formData.password) {
-            toast.error("Username and Password required!");
+    const handleRegister = async () => {
+        if (!formData.full_name || !formData.username || !formData.email || !formData.password) {
+            toast.error("All fields are required!");
             return;
         }
 
         setLoading(true);
         try {
             const res = await axios.post(
-                "http://localhost:8080/api/auth/login",
+                "http://localhost:8080/api/auth/register",
                 {
-                    email: formData.username,
+                    full_name: formData.full_name,
+                    username: formData.username,
+                    email: formData.email,
                     password: formData.password,
+                    role: "admin" // Hardcoded role for admin registration from this portal
                 },
                 {
                     headers: { "Content-Type": "application/json" },
                 }
             );
 
-            toast.success("Login successful!");
-            console.log("Token / Data:", res.data);
+            toast.success("Registration successful! Please login.");
+            
+            // Navigate to login after short delay
+            setTimeout(() => {
+                navigate("/login", { replace: true });
+            }, 1500);
 
-            // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Save token in localStorage
-            const token = res.data.token; // ya API ka jo actual token field hai
-            localStorage.setItem("authToken", token);
-
-            // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ call onLogin with token/data if needed
-            onLogin?.(res.data);
-            navigate("/dashboard", { replace: true });
         } catch (err) {
-            toast.error(err.response?.data?.message || "Login failed!");
+            toast.error(err.response?.data?.message || "Registration failed!");
         } finally {
             setLoading(false);
         }
@@ -65,8 +69,24 @@ export default function LoginPage({ onLogin }) {
             <div className="flex-1 flex flex-col justify-center items-center z-10 relative p-10">
                 <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-2xl border border-gray-200 transform transition-transform hover:scale-105 relative">
                     <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-                        Welcome Back
+                        Create an Account
                     </h2>
+
+                    {/* Full Name */}
+                    <div className="mb-4">
+                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+                            Full Name
+                        </label>
+                        <input
+                            type="text"
+                            placeholder="Enter your full name"
+                            value={formData.full_name}
+                            onChange={(e) =>
+                                setFormData({ ...formData, full_name: e.target.value })
+                            }
+                            className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition duration-300"
+                        />
+                    </div>
 
                     {/* Username */}
                     <div className="mb-4">
@@ -75,10 +95,26 @@ export default function LoginPage({ onLogin }) {
                         </label>
                         <input
                             type="text"
-                            placeholder="Enter your username"
+                            placeholder="Choose a username"
                             value={formData.username}
                             onChange={(e) =>
                                 setFormData({ ...formData, username: e.target.value })
+                            }
+                            className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition duration-300"
+                        />
+                    </div>
+
+                    {/* Email */}
+                    <div className="mb-4">
+                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+                            Email
+                        </label>
+                        <input
+                            type="email"
+                            placeholder="Enter your email"
+                            value={formData.email}
+                            onChange={(e) =>
+                                setFormData({ ...formData, email: e.target.value })
                             }
                             className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition duration-300"
                         />
@@ -91,7 +127,7 @@ export default function LoginPage({ onLogin }) {
                         </label>
                         <input
                             type="password"
-                            placeholder="Enter your password"
+                            placeholder="Create a password"
                             value={formData.password}
                             onChange={(e) =>
                                 setFormData({ ...formData, password: e.target.value })
@@ -100,41 +136,24 @@ export default function LoginPage({ onLogin }) {
                         />
                     </div>
 
-                    {/* Forgot password */}
-                    {/* <div 
-                     onClick={() => navigate("/reset-password")}
-                     className="flex justify-end mb-4">
-                        <a href="#" className="text-sm text-indigo-600 hover:underline">
-                            Forgot password?
-                        </a>
-                    </div> */}
-                    <div
-                        onClick={() => navigate("/forgot-password")}
-                        className="flex justify-end mb-4 cursor-pointer"
-                    >
-                        <span className="text-sm text-indigo-600 hover:underline">
-                            Forgot password?
-                        </span>
-                    </div>
-
-                    {/* Login Button */}
+                    {/* Register Button */}
                     <button
-                        onClick={handleLogin}
+                        onClick={handleRegister}
                         disabled={loading}
-                        className="w-full bg-indigo-600 text-white py-3 mt-2 rounded-xl font-medium hover:bg-indigo-700 transition-all transform active:scale-95 shadow-md"
+                        className="w-full bg-indigo-600 text-white py-3 mt-4 rounded-xl font-medium hover:bg-indigo-700 transition-all transform active:scale-95 shadow-md"
                     >
-                        {loading ? "Logging in..." : "Login"}
+                        {loading ? "Registering..." : "Sign Up"}
                     </button>
                 </div>
 
                 {/* Optional Footer */}
                 <p className="mt-6 text-sm text-gray-500">
-                    Don't have an account?{" "}
+                    Already have an account?{" "}
                     <span 
-                        onClick={() => navigate("/register")}
+                        onClick={() => navigate("/login")}
                         className="text-indigo-600 hover:underline cursor-pointer"
                     >
-                        Sign up
+                        Log in
                     </span>
                 </p>
             </div>

@@ -15,7 +15,7 @@ import { logout } from "../../services/authService";
 import { getUsers } from "../../services/userService";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../services/axiosInstance"; // import API instance
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 export default function Header({ onToggleSidebar }) {
   const [open, setOpen] = useState(false);

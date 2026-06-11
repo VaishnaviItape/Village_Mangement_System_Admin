@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import SmartDataTable from "../components/tables/SmartDataTable";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
 import { Upload } from "lucide-react";
 import {
     getProperty,
@@ -163,7 +163,7 @@ export default function PropertyPage() {
 
     return (
         <div className="p-8 space-y-6">
-            <Toaster position="top-center" />
+            
 
             {/* TABLE + BULK UPLOAD */}
             <div className="flex justify-between items-center">
@@ -248,29 +248,25 @@ export default function PropertyPage() {
                         onChange={(e) => setFormData({ ...formData, ownership_type: e.target.value })}
                     />
 
-                    <div className="md:col-span-2">
-                        <SmartFormField
-                            label="Address"
-                            value={formData.address}
-                            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                            fullWidth
-                        />
-                    </div>
+                    <SmartFormField
+                        label="Address"
+                        value={formData.address}
+                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                        fullWidth
+                    />
 
-                    <div className="md:col-span-2">
-                        <SmartFormField
-                            label="Village"
-                            type="select"
-                            options={[
-                                { value: "", label: "Select Village" },
-                                ...villages.map(v => ({ value: v.VillageID, label: v.VillageName }))
-                            ]}
-                            value={formData.village_id}
-                            onChange={(e) => setFormData({ ...formData, village_id: e.target.value })}
-                            required
-                            fullWidth
-                        />
-                    </div>
+                    <SmartFormField
+                        label="Village"
+                        type="select"
+                        options={[
+                            { value: "", label: "Select Village" },
+                            ...villages.map(v => ({ value: v.VillageID, label: v.VillageName }))
+                        ]}
+                        value={formData.village_id}
+                        onChange={(e) => setFormData({ ...formData, village_id: e.target.value })}
+                        required
+                        fullWidth
+                    />
                 </div>
             </SmartModal>
         </div>

@@ -1,54 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../services/axiosInstance';
-import toast from 'react-hot-toast';
+import SmartDataTable from "../../components/tables/SmartDataTable";
+import { toast } from "react-toastify";
 
 export default function HealthSanitation() {
     const [records, setRecords] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const fetchRecords = async () => {
+        setLoading(true);
+        try {
+            const res = await axiosInstance.get('/api/sv/health');
+            setRecords(res.data.data || []);
+        } catch (err) {
+            toast.error("Failed to load health records");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchRecords = async () => {
-            try {
-                const res = await axiosInstance.get('/api/sv/health');
-                setRecords(res.data.data);
-            } catch (err) {
-                toast.error("Failed to load health records");
-            }
-        };
         fetchRecords();
     }, []);
 
+    const columns = [
+        { header: "ID", accessor: "id" },
+        { header: "Type", cell: (row) => <span className="capitalize">{row.type.replace('_', ' ')}</span> },
+        { header: "Details", accessor: "details" },
+        { header: "Reported By", accessor: "reported_by" },
+        {
+            header: "Status", cell: (row) => (
+                <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-medium">{row.status}</span>
+            )
+        }
+    ];
+
     return (
-        <div className="p-6">
-            <h2 className="text-2xl font-bold text-slate-800 mb-6">Health & Sanitation</h2>
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                <table className="w-full text-left">
-                    <thead className="bg-slate-50 border-b border-slate-200">
-                        <tr>
-                            <th className="p-4 text-sm font-semibold text-slate-600">ID</th>
-                            <th className="p-4 text-sm font-semibold text-slate-600">Type</th>
-                            <th className="p-4 text-sm font-semibold text-slate-600">Details</th>
-                            <th className="p-4 text-sm font-semibold text-slate-600">Reported By</th>
-                            <th className="p-4 text-sm font-semibold text-slate-600">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {records.map((r) => (
-                            <tr key={r.id} className="border-b border-slate-100 hover:bg-slate-50">
-                                <td className="p-4 text-sm text-slate-700">#{r.id}</td>
-                                <td className="p-4 text-sm text-slate-700 capitalize">{r.type.replace('_', ' ')}</td>
-                                <td className="p-4 text-sm text-slate-700">{r.details}</td>
-                                <td className="p-4 text-sm text-slate-700">{r.reported_by}</td>
-                                <td className="p-4 text-sm">
-                                    <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-medium">{r.status}</span>
-                                </td>
-                            </tr>
-                        ))}
-                        {records.length === 0 && (
-                            <tr><td colSpan="5" className="p-4 text-center text-slate-500">No records found.</td></tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+        <div className="p-8 space-y-6">
+
+
+            <SmartDataTable
+                title="Health & Sanitation Records"
+                columns={columns}
+                data={records}
+                showSerial={true}
+                showAddButton={false}
+            />
+
+            {loading && (
+                <div className="fixed inset-0 flex items-center justify-center bg-white/50 z-50">
+                    <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            )}
         </div>
     );
 }

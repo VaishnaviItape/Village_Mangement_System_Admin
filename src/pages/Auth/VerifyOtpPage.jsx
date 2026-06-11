@@ -1,7 +1,7 @@
 // // src/pages/Auth/VerifyOtpPage.jsx
 // import React, { useState } from "react";
 // import { useNavigate, useLocation } from "react-router-dom";
-// import toast, { Toaster } from "react-hot-toast";
+// import { toast } from "react-toastify";
 // import { ArrowLeft } from "lucide-react";
 // import { verifyOtp, resendOtp } from "../../services/authService";
 
@@ -44,7 +44,7 @@
 
 //   return (
 //     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 to-violet-700 p-6">
-//       <Toaster position="top-right" />
+//       
 //       <div className="w-full max-w-md relative">
 //         <button
 //           onClick={() => navigate(-1)}
@@ -107,7 +107,7 @@
 // src/pages/Auth/VerifyOtpPage.jsx
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
 import { ArrowLeft } from "lucide-react";
 import { verifyOtp, resendOtp } from "../../services/authService";
 import otpIllustration from "../../assets/otp.png"; // Optional illustration
@@ -151,7 +151,7 @@ export default function VerifyOtpPage() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-            <Toaster position="top-right" />
+            
             <div className="bg-white rounded-3xl shadow-2xl flex flex-col md:flex-row w-full max-w-4xl">
 
                 {/* Left: Illustration */}

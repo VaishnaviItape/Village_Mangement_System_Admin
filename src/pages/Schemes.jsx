@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SmartDataTable from "../components/tables/SmartDataTable";
 import { getSchemes, addScheme, updateScheme, deleteScheme } from "../services/schemeService";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
 import SmartModal from "../components/ui/SmartModal";
 import SmartFormField from "../components/ui/SmartFormField";
 
@@ -104,7 +104,7 @@ export default function Schemes() {
 
     return (
         <div className="p-8 space-y-6">
-            <Toaster position="top-center" />
+            
 
             <SmartDataTable
                 title="Scheme Management"

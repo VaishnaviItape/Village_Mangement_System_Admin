@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Camera } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../services/axiosInstance"; // Make sure path is correct
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 export default function ProfilePage() {
     const [user, setUser] = useState({

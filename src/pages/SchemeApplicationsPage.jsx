@@ -8,7 +8,7 @@ import {
 } from "../services/schemeApplicationService";
 import { getCitizens } from "../services/citizenService";
 import { getSchemes } from "../services/schemeService";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
 import SmartModal from "../components/ui/SmartModal";
 import SmartFormField from "../components/ui/SmartFormField";
 
@@ -26,7 +26,8 @@ export default function SchemeApplicationsPage() {
         status: "Pending",
         eligibility_score: "",
         submitted_at: "",
-        approved_at: ""
+        approved_at: "",
+        documents: null
     });
 
     useEffect(() => {
@@ -74,13 +75,23 @@ export default function SchemeApplicationsPage() {
 
     const handleEdit = (app) => {
         setEditingApp(app);
+        let docs = null;
+        try {
+            if (app.documents) {
+                docs = typeof app.documents === 'string' ? JSON.parse(app.documents) : app.documents;
+            }
+        } catch (e) {
+            console.error("Error parsing documents", e);
+        }
+
         setFormData({
             user_id: app.user_id || "",
             scheme_id: app.scheme_id || "",
             status: app.status || "Pending",
             eligibility_score: app.eligibility_score || "",
             submitted_at: app.submitted_at ? app.submitted_at.split("T")[0] : "",
-            approved_at: app.approved_at ? app.approved_at.split("T")[0] : ""
+            approved_at: app.approved_at ? app.approved_at.split("T")[0] : "",
+            documents: docs
         });
         setIsModalOpen(true);
     };
@@ -143,14 +154,14 @@ export default function SchemeApplicationsPage() {
 
     return (
         <div className="p-8 space-y-6">
-            <Toaster position="top-center" />
+            
 
             <SmartDataTable
                 title="Scheme Applications"
                 columns={columns}
                 data={displayApplications}
                 showSerial={true}
-                onAdd={handleAdd}
+                showAddButton={false}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
             />
@@ -162,8 +173,14 @@ export default function SchemeApplicationsPage() {
             )}
 
             {/* Modal */}
-            <SmartModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingApp ? "Edit Application" : "Add Application"} onSave={handleSave}>
+            <SmartModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingApp ? "Review Application" : "Add Application"} onSave={handleSave}>
                 <div className="space-y-4">
+                    {editingApp && (
+                        <div className="bg-blue-50 p-4 rounded-lg mb-4">
+                            <h3 className="font-semibold text-blue-800 mb-2">Review Mode</h3>
+                            <p className="text-sm text-blue-600">Please review the applicant's details and documents before approving.</p>
+                        </div>
+                    )}
                     <SmartFormField
                         label="Select Citizen"
                         type="select"
@@ -217,6 +234,34 @@ export default function SchemeApplicationsPage() {
                             onChange={(e) => setFormData({ ...formData, approved_at: e.target.value })}
                         />
                     </div>
+                    
+                    {formData.documents && (
+                        <div className="mt-4 border-t pt-4">
+                            <h4 className="font-medium text-gray-800 mb-3">Submitted Documents</h4>
+                            <div className="space-y-2">
+                                {Object.entries(formData.documents).map(([key, value]) => (
+                                    <div key={key} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-200">
+                                        <span className="capitalize text-sm font-medium text-gray-700">{key}</span>
+                                        <a href="#" className="text-blue-600 hover:text-blue-800 text-sm font-semibold flex items-center gap-1" onClick={(e) => { e.preventDefault(); alert(`Viewing ${value}`); }}>
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                            View Document
+                                        </a>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    
+                    {editingApp && (
+                        <div className="flex gap-3 pt-4 border-t mt-4">
+                            <button onClick={() => setFormData({...formData, status: 'Approved', approved_at: new Date().toISOString().split("T")[0]})} className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium transition-colors">
+                                Approve Application
+                            </button>
+                            <button onClick={() => setFormData({...formData, status: 'Rejected'})} className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-medium transition-colors">
+                                Reject Application
+                            </button>
+                        </div>
+                    )}
                 </div>
             </SmartModal>
         </div>

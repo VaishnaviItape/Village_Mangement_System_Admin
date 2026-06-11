@@ -4,7 +4,7 @@ import { getTaxes, addTax, updateTax, deleteTax } from "../services/taxService";
 import { getUsers } from "../services/userService";
 import { getVillages } from "../services/villageService";
 import { getProperty } from "../services/propertyService";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import SmartModal from "../components/ui/SmartModal";
 import SmartFormField from "../components/ui/SmartFormField";
@@ -139,7 +139,7 @@ export default function TaxPage() {
 
     return (
         <div className="p-8 space-y-6">
-            <Toaster />
+
 
             <SmartDataTable
                 title="Tax Management"
@@ -157,78 +157,165 @@ export default function TaxPage() {
                 </div>
             )}
 
-            {/* Modal */}
-            <SmartModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingTax ? "Edit Tax" : "Add Tax"} onSave={handleSave}>
+            <SmartModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title={editingTax ? "Edit Tax Record" : "Add Tax Record"}
+                onSave={handleSave}
+            >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    {/* User */}
                     <SmartFormField
                         label="User"
                         type="select"
                         options={[
                             { value: "", label: "Select User" },
-                            ...users.map(u => ({ value: u.id, label: u.full_name }))
+                            ...users.map(u => ({
+                                value: u.id,
+                                label: u.full_name
+                            }))
                         ]}
                         value={formData.user_id}
-                        onChange={(e) => setFormData({ ...formData, user_id: e.target.value })}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                user_id: e.target.value
+                            })
+                        }
                         required
                     />
 
-                    <SmartFormField
-                        label="Property"
-                        type="select"
-                        options={[
-                            { value: "", label: "Select Property" },
-                            ...properties.map(p => ({ value: p.property_id, label: p.property_no }))
-                        ]}
-                        value={formData.property_id}
-                        onChange={(e) => setFormData({ ...formData, property_id: e.target.value })}
-                        required
-                    />
-
+                    {/* Village */}
                     <SmartFormField
                         label="Village"
                         type="select"
                         options={[
                             { value: "", label: "Select Village" },
-                            ...villages.map(v => ({ value: v.VillageID, label: v.VillageName }))
+                            ...villages.map(v => ({
+                                value: v.VillageID,
+                                label: v.VillageName
+                            }))
                         ]}
                         value={formData.village_id}
-                        onChange={(e) => setFormData({ ...formData, village_id: e.target.value })}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                village_id: e.target.value
+                            })
+                        }
                         required
                     />
 
+                    {/* Property */}
                     <SmartFormField
-                        label="Property No"
-                        value={formData.property_no}
-                        onChange={(e) => setFormData({ ...formData, property_no: e.target.value })}
+                        label="Property"
+                        type="select"
+                        options={[
+                            { value: "", label: "Select Property" },
+                            ...properties.map(p => ({
+                                value: p.property_id,
+                                label: p.property_no
+                            }))
+                        ]}
+                        value={formData.property_id}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                property_id: e.target.value
+                            })
+                        }
+                        required
                     />
 
+                    {/* Property Number */}
+                    <SmartFormField
+                        label="Property Number"
+                        placeholder="Enter Property Number"
+                        value={formData.property_no}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                property_no: e.target.value
+                            })
+                        }
+                    />
+
+                    {/* Tax Type */}
                     <SmartFormField
                         label="Tax Type"
+                        type="select"
+                        options={[
+                            "Property Tax",
+                            "Water Tax",
+                            "Light Tax",
+                            "Sanitation Tax"
+                        ]}
                         value={formData.tax_type}
-                        onChange={(e) => setFormData({ ...formData, tax_type: e.target.value })}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                tax_type: e.target.value
+                            })
+                        }
                     />
 
+                    {/* Amount */}
                     <SmartFormField
-                        label="Amount"
+                        label="Amount (₹)"
                         type="number"
+                        placeholder="Enter Tax Amount"
                         value={formData.amount}
-                        onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                amount: e.target.value
+                            })
+                        }
                     />
 
+                    {/* Due Date */}
                     <SmartFormField
                         label="Due Date"
                         type="date"
                         value={formData.due_date}
-                        onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                due_date: e.target.value
+                            })
+                        }
                     />
 
+                    {/* Status */}
                     <SmartFormField
                         label="Status"
                         type="select"
-                        options={["Active", "Pending", "Paid"]}
+                        options={[
+                            "Pending",
+                            "Paid",
+                            "Overdue",
+                            "Active"
+                        ]}
                         value={formData.status}
-                        onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                status: e.target.value
+                            })
+                        }
                     />
+                </div>
+
+                {/* Summary Card */}
+                <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <h4 className="font-semibold text-slate-700 mb-2">
+                        Tax Information
+                    </h4>
+                    <p className="text-sm text-slate-500">
+                        Select the user, property, and village details. Enter tax amount
+                        and due date before saving the record.
+                    </p>
                 </div>
             </SmartModal>
         </div>

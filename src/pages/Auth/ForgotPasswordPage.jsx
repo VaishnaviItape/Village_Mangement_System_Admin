@@ -61,7 +61,7 @@
 // src/pages/Auth/ForgotPasswordPage.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
 import { ArrowLeft } from "lucide-react";
 import { forgotPassword } from "../../services/authService";
 import forgot from "../../assets/forgot.png";
@@ -87,80 +87,69 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-      <Toaster position="top-right" />
+        <div className="min-h-screen flex relative bg-gray-50 overflow-hidden">
+            
 
-      <div className="bg-white rounded-3xl shadow-2xl flex flex-col md:flex-row w-full max-w-4xl">
-        {/* Left: Optional Illustration or placeholder */}
-        <div className="md:w-1/2 flex items-center justify-center p-8">
-          <div className="w-64 h-64 rounded-full flex items-center justify-center
-            bg-green-100 transition-all duration-500
-            hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-purple-500/10
-            shadow-md relative"
-             style={{ marginLeft: "20%" }} // <-- image thoda right shift
-            >
-            {/* Optional Illustration */}
-            <img src={forgot} alt="Illustration" className="max-w-[150%] max-h-[150%] object-contain" />
-          </div>
+            {/* Animated Background Shapes */}
+            <div className="absolute top-[-100px] left-[-100px] w-72 h-72 bg-emerald-300 rounded-full opacity-30 animate-ping-slow"></div>
+            <div className="absolute bottom-[-120px] right-[-100px] w-96 h-96 bg-stone-400 rounded-full opacity-20 animate-spin-slow"></div>
+            <div className="absolute top-[150px] right-[-80px] w-56 h-56 bg-amber-300 rounded-full opacity-20 animate-bounce-slow"></div>
+
+            {/* Left Side Image */}
+            <div
+                className="hidden md:flex w-1/2 bg-contain bg-no-repeat bg-center relative z-10 transition-transform duration-500 hover:scale-105 rounded-l-2xl overflow-hidden"
+                style={{ backgroundImage: `url(${forgot})` }}
+            ></div>
+
+            {/* Right Side Form */}
+            <div className="flex-1 flex flex-col justify-center items-center z-10 relative p-10">
+                <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-2xl border border-gray-200 transform transition-transform hover:scale-105 relative">
+                    {/* Back Button */}
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="absolute -top-4 -left-4 text-white bg-indigo-600 p-2 rounded-full shadow-lg hover:bg-indigo-700 hover:scale-105 transition-all duration-300"
+                        aria-label="Back"
+                    >
+                        <ArrowLeft className="w-5 h-5" />
+                    </button>
+
+                    <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+                        Forgot Password?
+                    </h2>
+
+                    <p className="text-sm text-gray-600 mb-6 text-center">
+                        Enter the email address associated with your account.
+                    </p>
+
+                    <form onSubmit={handleSubmit}>
+                        <div className="mb-4">
+                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+                                Email Address
+                            </label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Enter your email"
+                                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition duration-300"
+                                required
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-indigo-600 text-white py-3 mt-2 rounded-xl font-medium hover:bg-indigo-700 transition-all transform active:scale-95 shadow-md"
+                        >
+                            {loading ? "Sending..." : "Next"}
+                        </button>
+                    </form>
+
+                    <p className="text-center text-gray-500 text-sm mt-6">
+                        If you don't receive the email, check spam or try again.
+                    </p>
+                </div>
+            </div>
         </div>
-
-        {/* Right: Form */}
-        <div className="md:w-1/2 flex flex-col justify-center px-12 py-20 relative">
-          {/* Back Button */}
-          <button
-            onClick={() => navigate(-1)}
-            className="absolute left-6 top-6 text-white 
-              bg-gradient-to-br from-indigo-500 to-violet-600 
-              p-3 rounded-full shadow-lg hover:scale-105 
-              hover:shadow-xl transition-all duration-300 
-              backdrop-blur-sm"
-            aria-label="Back"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </button>
-
-          {/* Heading */}
-          <h2 className="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 mb-12 text-center md:text-left">
-            Forgot <br /> Password?
-          </h2>
-
-          {/* Subtext */}
-          <p className="text-xl text-gray-600 mb-8 text-center">
-            Enter the email address associated with your account.
-          </p>
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <input placeholder="Enter value" 
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter Email Address"
-              className="w-full px-4 py-3 rounded-xl bg-gray-100 text-gray-800 
-                placeholder-gray-500 focus:outline-none 
-                focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition"
-              required
-            />
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 rounded-xl 
-                bg-gradient-to-r from-indigo-600 to-violet-600 
-                text-white font-medium shadow-lg 
-                hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-purple-500/10 
-                hover:text-indigo-700
-                hover:scale-[1.02] active:scale-95 transition-all duration-300"
-            >
-              {loading ? "Sending..." : "Next"}
-            </button>
-          </form>
-
-          <p className="text-center text-gray-500 text-sm mt-4">
-             If you donÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢t receive the email, check spam or try again.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }

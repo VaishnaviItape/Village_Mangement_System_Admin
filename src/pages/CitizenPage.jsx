@@ -7,7 +7,7 @@ import {
     deleteCitizen,
 } from "../services/citizenService";
 import { getVillages } from "../services/villageService";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import SmartModal from "../components/ui/SmartModal";
 import SmartFormField from "../components/ui/SmartFormField";
@@ -156,7 +156,7 @@ export default function CitizenPage() {
 
     return (
         <div className="p-8 space-y-6">
-            <Toaster position="top-center" />
+
 
             <SmartDataTable
                 title="Citizen Management"
@@ -175,94 +175,144 @@ export default function CitizenPage() {
             )}
 
             {/* Modal */}
-            <SmartModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingCitizen ? "Edit Citizen" : "Add Citizen"} onSave={handleSave}>
-                <SmartFormField
-                    label="Full Name"
-                    value={formData.full_name}
-                    onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                    required
-                />
+            <SmartModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title={editingCitizen ? "Edit Citizen" : "Add Citizen"}
+                onSave={handleSave}
+            >
 
-                <SmartFormField
-                    label="Father Name"
-                    value={formData.father_name}
-                    onChange={(e) => setFormData({ ...formData, father_name: e.target.value })}
-                />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-                <SmartFormField
-                    label="Email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                />
-
-                <SmartFormField
-                    label="Mobile"
-                    type="tel"
-                    value={formData.mobile}
-                    onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
-                />
-
-                <SmartFormField
-                    label="Password"
-                    type="password"
-                    value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                />
-
-                <SmartFormField
-                    label="Role"
-                    type="select"
-                    options={[{value: '', label: 'Select Role'}, 'SuperAdmin', 'Admin']}
-                    value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                />
-
-                <SmartFormField
-                    label="Gender"
-                    type="select"
-                    options={[{value: '', label: 'Select Gender'}, 'Male', 'Female', 'Other']}
-                    value={formData.gender}
-                    onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                />
-
-                <SmartFormField
-                    label="Date of Birth"
-                    type="date"
-                    value={formData.dob}
-                    onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
-                />
-
-                <SmartFormField
-                    label="Aadhaar No"
-                    value={formData.aadhaar_no}
-                    onChange={(e) => setFormData({ ...formData, aadhaar_no: e.target.value })}
-                    required
-                />
-
-                <div className="md:col-span-2">
                     <SmartFormField
-                        label="Address"
-                        value={formData.address}
-                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                        fullWidth
+                        label="Full Name"
+                        value={formData.full_name}
+                        onChange={(e) =>
+                            setFormData({ ...formData, full_name: e.target.value })
+                        }
+                        required
                     />
-                </div>
 
-                <div className="md:col-span-2">
                     <SmartFormField
-                        label="Village"
+                        label="Father Name"
+                        value={formData.father_name}
+                        onChange={(e) =>
+                            setFormData({ ...formData, father_name: e.target.value })
+                        }
+                    />
+
+                    <SmartFormField
+                        label="Email"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) =>
+                            setFormData({ ...formData, email: e.target.value })
+                        }
+                    />
+
+                    <SmartFormField
+                        label="Mobile"
+                        type="tel"
+                        value={formData.mobile}
+                        onChange={(e) =>
+                            setFormData({ ...formData, mobile: e.target.value })
+                        }
+                    />
+
+                    <SmartFormField
+                        label="Password"
+                        type="password"
+                        value={formData.password}
+                        onChange={(e) =>
+                            setFormData({ ...formData, password: e.target.value })
+                        }
+                    />
+
+                    <SmartFormField
+                        label="Role"
                         type="select"
                         options={[
-                            { value: "", label: "Select Village" },
-                            ...villages.map(v => ({ value: v.VillageID, label: v.VillageName }))
+                            { value: "", label: "Select Role" },
+                            { value: "SuperAdmin", label: "Super Admin" },
+                            { value: "Admin", label: "Admin" }
                         ]}
-                        value={formData.VillageID}
-                        onChange={(e) => setFormData({ ...formData, VillageID: e.target.value })}
-                        required
-                        fullWidth
+                        value={formData.role}
+                        onChange={(e) =>
+                            setFormData({ ...formData, role: e.target.value })
+                        }
                     />
+
+                    <SmartFormField
+                        label="Gender"
+                        type="select"
+                        options={[
+                            { value: "", label: "Select Gender" },
+                            { value: "Male", label: "Male" },
+                            { value: "Female", label: "Female" },
+                            { value: "Other", label: "Other" }
+                        ]}
+                        value={formData.gender}
+                        onChange={(e) =>
+                            setFormData({ ...formData, gender: e.target.value })
+                        }
+                    />
+
+                    <SmartFormField
+                        label="Date of Birth"
+                        type="date"
+                        value={formData.dob}
+                        onChange={(e) =>
+                            setFormData({ ...formData, dob: e.target.value })
+                        }
+                    />
+
+                    <SmartFormField
+                        label="Aadhaar Number"
+                        value={formData.aadhaar_no}
+                        onChange={(e) =>
+                            setFormData({ ...formData, aadhaar_no: e.target.value })
+                        }
+                        required
+                    />
+
+                    {/* Village Full Width */}
+                    <div className="md:col-span-2">
+                        <SmartFormField
+                            label="Village"
+                            type="select"
+                            options={[
+                                { value: "", label: "Select Village" },
+                                ...villages.map((v) => ({
+                                    value: v.VillageID,
+                                    label: v.VillageName,
+                                })),
+                            ]}
+                            value={formData.VillageID}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    VillageID: e.target.value,
+                                })
+                            }
+                            required
+                            fullWidth
+                        />
+                    </div>
+
+                    {/* Address Full Width */}
+                    <div className="md:col-span-2">
+                        <SmartFormField
+                            label="Address"
+                            value={formData.address}
+                            onChange={(e) =>
+                                setFormData({ ...formData, address: e.target.value })
+                            }
+                            fullWidth
+                        />
+                    </div>
+
                 </div>
+
             </SmartModal>
         </div>
     );

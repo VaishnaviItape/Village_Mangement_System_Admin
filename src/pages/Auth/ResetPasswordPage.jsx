@@ -1,5 +1,5 @@
 // import React, { useState } from "react";
-// import toast, { Toaster } from "react-hot-toast";
+// import { toast } from "react-toastify";
 // import axiosInstance from "../../services/axiosInstance";
 
 // export default function ResetPasswordPage() {
@@ -49,7 +49,7 @@
 
 //   return (
 //     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 p-6">
-//       <Toaster position="top-right" />
+//       
 //       <div className="bg-white rounded-2xl shadow-2xl w-full border border-slate-100 max-w-md p-8">
 //         <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
 //           Reset Password
@@ -128,7 +128,7 @@
 // src/pages/Auth/ResetPasswordPage.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { resetPassword } from "../../services/authService";
 import resetIllustration from "../../assets/reset.png"; // optional illustration
@@ -169,7 +169,7 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-      <Toaster position="top-right" />
+      
       <div className="bg-white/20 backdrop-blur-lg rounded-3xl shadow-2xl flex flex-col md:flex-row w-full max-w-4xl overflow-hidden">
         
         {/* Left Illustration */}

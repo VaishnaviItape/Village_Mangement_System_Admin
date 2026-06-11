@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
 import {
   getMyConversations,
   getConversationMessages,
@@ -245,7 +245,7 @@ export default function MessagesPage() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#e5ddd5]">
-      <Toaster />
+      
 
       {/* Left Pane */}
       <aside className="w-1/3 border-r border-gray-300 flex flex-col bg-white">

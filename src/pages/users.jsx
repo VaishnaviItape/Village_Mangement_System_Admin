@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SmartDataTable from "../components/tables/SmartDataTable";
 import { getUsers, addUser, updateUser, deleteUser } from "../services/userService";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
 import { Eye, EyeOff, Upload } from "lucide-react"; // <-- install: npm install lucide-react
 import { API_BASE_URL } from "../config/apiConfig";
 import SmartModal from "../components/ui/SmartModal";
@@ -145,7 +145,7 @@ export default function Users() {
 
     return (
         <div className="p-8 space-y-6">
-            <Toaster position="top-center" />
+            
 
             <SmartDataTable
                 title="User Management"

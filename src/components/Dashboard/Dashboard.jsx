@@ -3,7 +3,7 @@ import StatsGrid from "./StatsGrid";
 import ChartSection from "./ChartSection";
 import TableSection from "./TableSection";
 import { getDashboardData } from "../../services/dashboardService";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 function Dashboard() {
     const [dashboardData, setDashboardData] = useState(null);

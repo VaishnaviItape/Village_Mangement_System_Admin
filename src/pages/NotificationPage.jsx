@@ -6,11 +6,12 @@ import {
     updateNotification,
     deleteNotification,
 } from "../services/notificationService";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
 
 export default function NotificationPage() {
 
     const [notifications, setNotifications] = useState([]);
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingNotification, setEditingNotification] = useState(null);
@@ -22,21 +23,26 @@ export default function NotificationPage() {
         status: "Unread",
     });
 
-    // Fetch Notifications
-    const fetchNotifications = async () => {
+    // Fetch Notifications and Users
+    const fetchData = async () => {
         setLoading(true);
         try {
-            const res = await getNotifications();
-            setNotifications(res.data.data);
-        } catch {
-            toast.error("Failed to fetch notifications");
+            const [notifRes, userRes] = await Promise.all([
+                getNotifications(),
+                import("../services/userService").then(m => m.getUsers())
+            ]);
+            setNotifications(notifRes.data.data);
+            setUsers(userRes.data.data || []);
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to fetch data");
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchNotifications();
+        fetchData();
     }, []);
 
     // Add
@@ -70,7 +76,7 @@ export default function NotificationPage() {
         try {
             await deleteNotification(id);
             toast.success("Notification deleted successfully!");
-            fetchNotifications();
+            fetchData();
         } catch {
             toast.error("Failed to delete notification");
         }
@@ -93,16 +99,25 @@ export default function NotificationPage() {
             }
 
             setIsModalOpen(false);
-            fetchNotifications();
+            fetchData();
         } catch {
             toast.error("Failed to save notification");
         }
     };
 
+    const enrichedNotifications = notifications.map(n => {
+        // notification.user_id is stored as char/varchar but users.id is int
+        const user = users.find(u => String(u.id) === String(n.user_id));
+        return {
+            ...n,
+            userName: user ? user.full_name : n.user_id
+        };
+    });
+
     // Table Columns
     const columns = [
         { header: "ID", accessor: "notification_id" },
-        { header: "User ID", accessor: "user_id" },
+        { header: "User", accessor: "userName" },
         { header: "Message", accessor: "message" },
         { header: "Type", accessor: "type" },
         { header: "Status", accessor: "status" },
@@ -111,12 +126,12 @@ export default function NotificationPage() {
 
     return (
         <div className="p-8 space-y-6">
-            <Toaster position="top-center" />
+
 
             <SmartDataTable
                 title="Notification Management"
                 columns={columns}
-                data={notifications}
+                data={enrichedNotifications}
                 onAdd={handleAdd}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
@@ -139,12 +154,18 @@ export default function NotificationPage() {
 
                         <div className="space-y-4">
 
-                            <input
-                                placeholder="User ID"
+                            <select
                                 value={formData.user_id}
                                 onChange={(e) => setFormData({ ...formData, user_id: e.target.value })}
                                 className="w-full border px-3 py-2 rounded-lg"
-                            />
+                            >
+                                <option value="" disabled>Select User</option>
+                                {users.map((user) => (
+                                    <option key={user.id} value={user.id}>
+                                        {user.full_name}
+                                    </option>
+                                ))}
+                            </select>
 
                             <textarea
                                 placeholder="Notification Message"

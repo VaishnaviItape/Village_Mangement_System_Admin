@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
 import axiosInstance from "../../services/axiosInstance";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -64,7 +64,7 @@ export default function ChangePasswordPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 p-6">
-      <Toaster position="top-right" />
+      
 
       <div className="bg-white rounded-2xl shadow-2xl w-full border border-slate-100 max-w-md p-8 transform transition-all duration-300 hover:scale-[1.01]">
         <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center font-bahnschrift">

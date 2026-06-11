@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../services/axiosInstance';
-import toast from 'react-hot-toast';
+import { toast } from "react-toastify";
 import { FileDown, FileText, Download } from 'lucide-react';
 
 export default function AuditReports() {

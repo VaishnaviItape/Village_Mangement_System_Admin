@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SmartDataTable from "../components/tables/SmartDataTable";
 import { getApplications } from "../services/applicationService";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
 import SmartModal from "../components/ui/SmartModal";
 import SmartFormField from "../components/ui/SmartFormField";
 
@@ -65,13 +65,14 @@ export default function ApplicationPage() {
 
     return (
         <div className="p-8 space-y-6">
-            <Toaster position="top-center" />
+
 
             <SmartDataTable
                 title="Application Records"
                 columns={columns}
                 data={applications}
                 showSerial={true}
+                showAddButton={false}
                 hideActions={true} // ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â¡Ãƒâ€šÃ‚Â¨ Disable Add/Edit/Delete
             />
 

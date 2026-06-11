@@ -7,7 +7,7 @@ import {
   updateSubscriptionPlan,
   deleteSubscriptionPlan,
 } from "../services/subscriptionPlanService";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
 import SmartDataTable from "../components/tables/SmartDataTable";
 
 export default function SubscriptionPlanTable() {
@@ -158,12 +158,7 @@ export default function SubscriptionPlanTable() {
 
   return (
     <div>
-      <Toaster
-        position="top-center"
-        toastOptions={{
-          style: { minWidth: "400px", fontSize: "20px", padding: "16px 24px" },
-        }}
-      />
+      
 
       <SmartDataTable
         title="Subscription Plans"

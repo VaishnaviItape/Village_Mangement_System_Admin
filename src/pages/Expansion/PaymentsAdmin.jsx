@@ -1,63 +1,69 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../services/axiosInstance';
-import toast from 'react-hot-toast';
+import SmartDataTable from "../../components/tables/SmartDataTable";
+import { toast } from "react-toastify";
 import { IndianRupee, CheckCircle, Clock } from 'lucide-react';
 
 export default function PaymentsAdmin() {
     const [payments, setPayments] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const fetchPayments = async () => {
+        setLoading(true);
+        try {
+            const res = await axiosInstance.get('/api/sv/payments');
+            setPayments(res.data.data || []);
+        } catch (err) {
+            toast.error("Failed to load payments");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchPayments = async () => {
-            try {
-                const res = await axiosInstance.get('/api/sv/payments');
-                setPayments(res.data.data);
-            } catch (err) {
-                toast.error("Failed to load payments");
-            }
-        };
         fetchPayments();
     }, []);
 
+    const columns = [
+        { header: "TXN ID", cell: (row) => <span className="font-mono text-slate-500">{row.transaction_id}</span> },
+        { header: "User", cell: (row) => <span className="font-medium text-slate-800">{row.user_name}</span> },
+        { header: "Type", cell: (row) => <span className="capitalize">{row.payment_type.replace('_', ' ')}</span> },
+        {
+            header: "Amount", cell: (row) => (
+                <span className="font-bold text-green-600 flex items-center gap-1">
+                    <IndianRupee className="w-4 h-4" /> {row.amount}
+                </span>
+            )
+        },
+        { header: "Date", cell: (row) => new Date(row.payment_date).toLocaleDateString() },
+        {
+            header: "Status", cell: (row) => (
+                row.status === 'Success' ? (
+                    <span className="flex items-center gap-1 text-green-600 font-medium text-xs bg-green-50 px-2 py-1 rounded-full w-fit"><CheckCircle className="w-3 h-3" /> {row.status}</span>
+                ) : (
+                    <span className="flex items-center gap-1 text-yellow-600 font-medium text-xs bg-yellow-50 px-2 py-1 rounded-full w-fit"><Clock className="w-3 h-3" /> {row.status}</span>
+                )
+            )
+        }
+    ];
+
     return (
-        <div className="p-6">
-            <h2 className="text-2xl font-bold text-slate-800 mb-6">Digital Payments Ledger</h2>
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                <table className="w-full text-left">
-                    <thead className="bg-slate-50 border-b border-slate-200">
-                        <tr>
-                            <th className="p-4 text-sm font-semibold text-slate-600">TXN ID</th>
-                            <th className="p-4 text-sm font-semibold text-slate-600">User</th>
-                            <th className="p-4 text-sm font-semibold text-slate-600">Type</th>
-                            <th className="p-4 text-sm font-semibold text-slate-600">Amount</th>
-                            <th className="p-4 text-sm font-semibold text-slate-600">Date</th>
-                            <th className="p-4 text-sm font-semibold text-slate-600">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {payments.map((p) => (
-                            <tr key={p.id} className="border-b border-slate-100 hover:bg-slate-50">
-                                <td className="p-4 text-sm font-mono text-slate-500">{p.transaction_id}</td>
-                                <td className="p-4 text-sm font-medium text-slate-800">{p.user_name}</td>
-                                <td className="p-4 text-sm text-slate-600 capitalize">{p.payment_type.replace('_', ' ')}</td>
-                                <td className="p-4 text-sm font-bold text-green-600 flex items-center gap-1">
-                                    <IndianRupee className="w-4 h-4"/> {p.amount}
-                                </td>
-                                <td className="p-4 text-sm text-slate-500">{new Date(p.payment_date).toLocaleDateString()}</td>
-                                <td className="p-4 text-sm">
-                                    {p.status === 'Success' ? (
-                                        <span className="flex items-center gap-1 text-green-600 font-medium text-xs bg-green-50 px-2 py-1 rounded-full w-fit"><CheckCircle className="w-3 h-3"/> {p.status}</span>
-                                    ) : (
-                                        <span className="flex items-center gap-1 text-yellow-600 font-medium text-xs bg-yellow-50 px-2 py-1 rounded-full w-fit"><Clock className="w-3 h-3"/> {p.status}</span>
-                                    )}
-                                </td>
-                            </tr>
-                        ))}
-                        {payments.length === 0 && (
-                            <tr><td colSpan="6" className="p-4 text-center text-slate-500">No transactions recorded.</td></tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+        <div className="p-8 space-y-6">
+
+
+            <SmartDataTable
+                title="Digital Payments Ledger"
+                columns={columns}
+                data={payments}
+                showSerial={true}
+                showAddButton={false}
+            />
+
+            {loading && (
+                <div className="fixed inset-0 flex items-center justify-center bg-white/50 z-50">
+                    <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            )}
         </div>
     );
 }

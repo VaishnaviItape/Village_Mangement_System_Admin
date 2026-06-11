@@ -1,35 +1,49 @@
 import React, { useEffect, useState } from "react";
 import SmartDataTable from "../components/tables/SmartDataTable";
+import { getCitizens } from "../services/citizenService";
 import { getComplaints } from "../services/complaintService";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
 import SmartModal from "../components/ui/SmartModal";
 import SmartFormField from "../components/ui/SmartFormField";
 
 export default function ComplaintPage() {
     const [complaints, setComplaints] = useState([]);
+    const [citizens, setCitizens] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Fetch complaints
-    const fetchComplaints = async () => {
+    // Fetch complaints and citizens
+    const fetchData = async () => {
         setLoading(true);
         try {
-            const res = await getComplaints();
-            setComplaints(res.data.data);
+            const [complaintRes, citizenRes] = await Promise.all([
+                getComplaints(),
+                getCitizens()
+            ]);
+            setComplaints(complaintRes?.data?.data || []);
+            setCitizens(citizenRes?.data?.data || []);
         } catch {
-            toast.error("Failed to fetch complaints!");
+            toast.error("Failed to fetch records!");
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchComplaints();
+        fetchData();
     }, []);
+
+    // Map User IDs to Names
+    const displayComplaints = complaints.map(complaint => {
+        const citizen = citizens.find(c => c.id === complaint.user_id || c.user_id === complaint.user_id);
+        return {
+            ...complaint,
+            citizenName: citizen ? citizen.full_name : complaint.user_id
+        };
+    });
 
     // Table Columns
     const columns = [
-        { header: "Complaint ID", accessor: "complaint_id" },
-        { header: "User ID", accessor: "user_id" },
+        { header: "Citizen", accessor: "citizenName" },
         { header: "Category", accessor: "category" },
         { header: "Description", accessor: "description" },
         { header: "Priority", accessor: "priority" },
@@ -58,14 +72,15 @@ export default function ComplaintPage() {
 
     return (
         <div className="p-8 space-y-6">
-            <Toaster position="top-center" />
+            
 
             <SmartDataTable
                 title="Complaint Records"
                 columns={columns}
-                data={complaints}
+                data={displayComplaints}
                 showSerial={true}
-                hideActions={true} // ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â¡Ãƒâ€šÃ‚Â¨ THIS HIDES Add/Edit/Delete
+                showAddButton={false}
+                showActions={false}
             />
 
             {/* Loader */}
