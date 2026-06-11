@@ -151,7 +151,7 @@ export default function CitizenPage() {
         { header: "Mobile", accessor: "mobile" },
         { header: "Gender", accessor: "gender" },
         { header: "Aadhaar", accessor: "aadhaar_no" },
-        { header: "Village", accessor: "villageName" }, // using our computed villageName
+        { header: "Village", accessor: "VillageName" }, // using our computed villageName
     ];
 
     return (

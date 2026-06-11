@@ -67,7 +67,7 @@ const allMenuItems = [
     ],
   },
   { id: "notification", icon: Bell, label: "Notifications" },
-  { id: "chatbot", icon: MessageSquare, label: "Chatbot Support" },
+  // { id: "chatbot", icon: MessageSquare, label: "Chatbot Support" },
   { id: "users", label: "User Management", icon: Users, restrictTo: ['superadmin'] },
   {
     id: "master", icon: Database, label: "Master Settings", restrictTo: ['superadmin'],

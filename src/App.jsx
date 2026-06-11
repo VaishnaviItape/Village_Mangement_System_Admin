@@ -431,7 +431,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/chatbot"
           element={
             <ProtectedRoute>
@@ -440,7 +440,7 @@ export default function App() {
               </Layout>
             </ProtectedRoute>
           }
-        />
+        /> */}
         <Route
           path="/reports/taxes"
           element={

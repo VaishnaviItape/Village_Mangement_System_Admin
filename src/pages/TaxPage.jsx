@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SmartDataTable from "../components/tables/SmartDataTable";
 import { getTaxes, addTax, updateTax, deleteTax } from "../services/taxService";
-import { getUsers } from "../services/userService";
+import { getCitizens } from "../services/citizenService";
 import { getVillages } from "../services/villageService";
 import { getProperty } from "../services/propertyService";
 import { toast } from "react-toastify";
@@ -11,7 +11,7 @@ import SmartFormField from "../components/ui/SmartFormField";
 
 export default function TaxPage() {
     const [taxes, setTaxes] = useState([]);
-    const [users, setUsers] = useState([]);
+    const [citizens, setCitizens] = useState([]);
     const [villages, setVillages] = useState([]);
     const [properties, setProperties] = useState([]);
 
@@ -42,12 +42,12 @@ export default function TaxPage() {
         }
     };
 
-    const fetchUsers = async () => {
+    const fetchCitizens = async () => {
         try {
-            const res = await getUsers();
-            setUsers(res.data.data || []);
+            const res = await getCitizens();
+            setCitizens(res.data.data || []);
         } catch {
-            toast.error("Failed to load users");
+            toast.error("Failed to load citizens");
         }
     };
 
@@ -71,7 +71,7 @@ export default function TaxPage() {
 
     useEffect(() => {
         fetchTaxes();
-        fetchUsers();
+        fetchCitizens();
         fetchVillages();
         fetchProperties();
     }, []);
@@ -110,8 +110,8 @@ export default function TaxPage() {
     };
 
     const handleSave = async () => {
-        if (!formData.user_id || !formData.property_id || !formData.village_id) {
-            toast.error("User, Property & Village are required");
+        if (!formData.user_id || !formData.property_id || !formData.village_id || !formData.tax_type || !formData.amount || !formData.due_date) {
+            toast.error("Please fill out all required fields (User, Property, Village, Tax Type, Amount, Due Date)");
             return;
         }
 
@@ -171,9 +171,9 @@ export default function TaxPage() {
                         type="select"
                         options={[
                             { value: "", label: "Select User" },
-                            ...users.map(u => ({
-                                value: u.id,
-                                label: u.full_name
+                            ...citizens.map(c => ({
+                                value: c.user_id,
+                                label: c.full_name
                             }))
                         ]}
                         value={formData.user_id}
@@ -258,6 +258,7 @@ export default function TaxPage() {
                                 tax_type: e.target.value
                             })
                         }
+                        required
                     />
 
                     {/* Amount */}
@@ -272,6 +273,7 @@ export default function TaxPage() {
                                 amount: e.target.value
                             })
                         }
+                        required
                     />
 
                     {/* Due Date */}
@@ -285,6 +287,7 @@ export default function TaxPage() {
                                 due_date: e.target.value
                             })
                         }
+                        required
                     />
 
                     {/* Status */}

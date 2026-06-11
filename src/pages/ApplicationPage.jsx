@@ -7,29 +7,48 @@ import SmartFormField from "../components/ui/SmartFormField";
 
 export default function ApplicationPage() {
     const [applications, setApplications] = useState([]);
+    const [citizens, setCitizens] = useState([]);
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Fetch applications
-    const fetchApplications = async () => {
+    // Fetch applications, citizens, and users
+    const fetchData = async () => {
         setLoading(true);
         try {
-            const res = await getApplications();
-            setApplications(res.data.data);
+            const [appRes, citRes, userRes] = await Promise.all([
+                getApplications(),
+                import("../services/citizenService").then(m => m.getCitizens()),
+                import("../services/userService").then(m => m.getUsers())
+            ]);
+            setApplications(appRes.data.data || []);
+            setCitizens(citRes.data.data || []);
+            setUsers(userRes.data.data || []);
         } catch {
-            toast.error("Failed to fetch applications!");
+            toast.error("Failed to fetch data!");
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchApplications();
+        fetchData();
     }, []);
+
+    const enrichedApplications = applications.map(app => {
+        const citizen = citizens.find(c => String(c.user_id) === String(app.user_id));
+        const officer = users.find(u => String(u.id) === String(app.assigned_officer_id));
+        
+        return {
+            ...app,
+            userName: citizen ? citizen.full_name : app.user_id,
+            officerName: officer ? officer.full_name : (app.assigned_officer_id || "-")
+        };
+    });
 
     // Table Columns
     const columns = [
         { header: "Application ID", accessor: "application_id" },
-        { header: "User ID", accessor: "user_id" },
+        { header: "User Name", accessor: "userName" },
         { header: "Certificate Type", accessor: "certificate_type" },
         {
             header: "Application Data",
@@ -37,7 +56,7 @@ export default function ApplicationPage() {
             cell: (row) => row.application_data ? JSON.stringify(row.application_data) : "N/A"
         },
         { header: "Status", accessor: "status" },
-        { header: "Assigned Officer", accessor: "assigned_officer_id" },
+        { header: "Assigned Officer", accessor: "officerName" },
         {
             header: "Rejection Reason",
             accessor: "reason_rejection",
@@ -70,10 +89,10 @@ export default function ApplicationPage() {
             <SmartDataTable
                 title="Application Records"
                 columns={columns}
-                data={applications}
+                data={enrichedApplications}
                 showSerial={true}
                 showAddButton={false}
-                hideActions={true} // ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â¡Ãƒâ€šÃ‚Â¨ Disable Add/Edit/Delete
+                hideActions={true} // 🚨 Disable Add/Edit/Delete
             />
 
             {/* Loader */}
